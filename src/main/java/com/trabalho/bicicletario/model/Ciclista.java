@@ -5,16 +5,19 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Entity
+@Table(name = "ciclista")
 public class Ciclista {
     @Id
-    private Long id;
+    private int id;
 
     @Getter @Setter
     private String nome;
 
-    @Getter @Setter
-    private String nascimento;
+    @Getter @Setter @Column(name = "data_nascimento")
+    private Date nascimento;
 
     @Getter @Setter
     private String cpf;

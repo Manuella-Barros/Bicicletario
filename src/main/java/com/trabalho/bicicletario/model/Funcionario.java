@@ -8,10 +8,13 @@ import lombok.Setter;
 @Entity
 public class Funcionario {
     @Id
-    private Long id;
+    private int id;
 
     @Getter @Setter
     private String senha;
+
+    @Getter @Setter
+    private String confirmação_senha;
 
     @Getter @Setter
     private String email;
@@ -29,5 +32,5 @@ public class Funcionario {
     private String cpf;
 
     @Getter @Setter
-    private String matricula;
+    private int matricula;
 }

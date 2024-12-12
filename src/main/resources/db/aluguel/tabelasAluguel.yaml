@@ -161,7 +161,7 @@ databaseChangeLog:
               - column:
                   name:  matricula
                   type:  int
-                  autoIncrement:  true
+                  autoIncrement:  false
                   constraints:
                     primaryKey:  true
                     nullable:  false

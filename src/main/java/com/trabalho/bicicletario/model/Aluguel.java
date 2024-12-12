@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Entity
 public class Aluguel {
-    @Id
+    @Id @Getter @Setter
     private int id;
 
     @Getter @Setter
