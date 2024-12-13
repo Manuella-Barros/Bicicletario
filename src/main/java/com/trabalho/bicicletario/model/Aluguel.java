@@ -2,17 +2,49 @@ package com.trabalho.bicicletario.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 public class Aluguel {
-    @Id @Getter @Setter
+    @Id
     private int id;
-
-    @Getter @Setter
     private int ciclistaId;
-
-    @Getter @Setter
     private int trancaInicio;
+
+    public Aluguel(int id, int ciclistaId, int trancaInicio) {
+        this.id = id;
+        this.ciclistaId = ciclistaId;
+        this.trancaInicio = trancaInicio;
+    }
+
+    public Aluguel() {
+
+    }
+
+    public boolean checkIfValid(){
+        return this.ciclistaId > 0 && this.trancaInicio > 0;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getCiclistaId() {
+        return ciclistaId;
+    }
+
+    public void setCiclistaId(int ciclistaId) {
+        this.ciclistaId = ciclistaId;
+    }
+
+    public int getTrancaInicio() {
+        return trancaInicio;
+    }
+
+    public void setTrancaInicio(int trancaInicio) {
+        this.trancaInicio = trancaInicio;
+    }
 }

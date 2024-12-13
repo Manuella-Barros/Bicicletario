@@ -129,6 +129,11 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: senha
+                  type: varchar(50)
+                  constraints:
+                    nullable:  false
         - addForeignKeyConstraint:
             baseTableName: Ciclista
             baseColumnNames: id_passaporte
