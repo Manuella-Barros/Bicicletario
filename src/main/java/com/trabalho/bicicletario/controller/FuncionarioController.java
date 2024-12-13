@@ -17,21 +17,21 @@ public class FuncionarioController {
 
     @PostMapping("")
     public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody Funcionario newFuncionario) {
-        ResponseEntity<Funcionario> funcionario = funcionarioService.postFuncionario(newFuncionario);
+        ResponseEntity<Funcionario> funcionario = funcionarioService.createFuncionario(newFuncionario);
 
         if(funcionario.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(funcionario.getStatusCode());
         }
 
         return ResponseEntity.ok(funcionario.getBody());
     }
 
     @GetMapping("/{idFuncionario}")
-    public ResponseEntity<Funcionario> recuperarFuncionário(@PathVariable int idFuncionario) {
+    public ResponseEntity<Funcionario> recuperarFuncionario(@PathVariable int idFuncionario) {
         ResponseEntity<Funcionario> funcionario = funcionarioService.getFuncionarioById(idFuncionario);
 
         if(funcionario.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(funcionario.getStatusCode());
         }
 
         return ResponseEntity.ok(funcionario.getBody());
@@ -46,5 +46,16 @@ public class FuncionarioController {
         }
 
         return ResponseEntity.ok(funcionario.getBody());
+    }
+
+    @DeleteMapping("/{idFuncionario}")
+    public ResponseEntity removerFuncionario(@PathVariable int idFuncionario) {
+        ResponseEntity funcionario = funcionarioService.removeFuncionario(idFuncionario);
+
+        if(funcionario.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(funcionario.getStatusCode());
+        }
+
+        return ResponseEntity.ok().build();
     }
 }

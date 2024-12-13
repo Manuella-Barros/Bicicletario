@@ -16,7 +16,7 @@ public class FuncionarioService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public ResponseEntity<Funcionario> postFuncionario(Funcionario funcionario ) {
+    public ResponseEntity<Funcionario> createFuncionario(Funcionario funcionario ) {
         if(!funcionario.checkIfValid()){ // TODO - ERRO ALGUM CAMPO VAZIO - 422
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -49,8 +49,22 @@ public class FuncionarioService {
         }
 
         updateFuncionario.setId(id);
-        this.postFuncionario(updateFuncionario);
+        this.createFuncionario(updateFuncionario);
 
         return ResponseEntity.ok(updateFuncionario);
+    }
+
+    public ResponseEntity removeFuncionario(int id) {
+        if(id <= 0){ // TODO - Dados Inválidos - 422
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        if(!this.getFuncionarioById(id).hasBody()){ // TODO - NÃO ENCONTRADO - 404
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        funcionarioRepository.deleteById(id);
+
+        return ResponseEntity.ok().build();
     }
 }
