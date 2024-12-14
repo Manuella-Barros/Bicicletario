@@ -9,10 +9,7 @@ import com.trabalho.bicicletario.service.CiclistaService;
 import com.trabalho.bicicletario.service.PassaporteService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @RequestMapping("/ciclista")
@@ -57,4 +54,28 @@ public class CiclistaController {
 
         return ResponseEntity.ok(ciclista.getBody());
     }
+
+    @GetMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
+    public ResponseEntity<Ciclista> recuperarCiclista(@PathVariable int idCiclista) {
+        ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(idCiclista);
+
+        if(ciclista.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(ciclista.getStatusCode());
+        }
+
+        return ResponseEntity.ok(ciclista.getBody());
+    }
+
+    @PutMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
+    public ResponseEntity<Ciclista> editarCiclista(@PathVariable int idCiclista, @RequestBody Ciclista updateCiclista) {
+        ResponseEntity<Ciclista> ciclista = ciclistaService.updateCiclista(idCiclista, updateCiclista);
+
+        if(ciclista.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(ciclista.getStatusCode());
+        }
+
+        return ResponseEntity.ok(ciclista.getBody());
+    }
+
+
 }
