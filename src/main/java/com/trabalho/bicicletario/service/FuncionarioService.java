@@ -25,6 +25,12 @@ public class FuncionarioService {
         return ResponseEntity.ok(createdFuncionario);
     }
 
+    public ResponseEntity<Iterable<Funcionario>> getFuncionarios() {
+        Iterable<Funcionario> iterableFuncionario = funcionarioRepository.findAll();
+
+        return ResponseEntity.ok(iterableFuncionario);
+    }
+
     public ResponseEntity<Funcionario> getFuncionarioById(int id) {
         if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);

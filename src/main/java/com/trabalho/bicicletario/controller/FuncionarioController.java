@@ -26,6 +26,13 @@ public class FuncionarioController {
         return ResponseEntity.ok(funcionario.getBody());
     }
 
+    @GetMapping("")
+    public ResponseEntity<Iterable<Funcionario>> recuperarTodosOsFuncionarios() {
+        ResponseEntity<Iterable<Funcionario>> funcionarios = funcionarioService.getFuncionarios();
+
+        return ResponseEntity.ok(funcionarios.getBody());
+    }
+
     @GetMapping("/{idFuncionario}")
     public ResponseEntity<Funcionario> recuperarFuncionario(@PathVariable int idFuncionario) {
         ResponseEntity<Funcionario> funcionario = funcionarioService.getFuncionarioById(idFuncionario);
