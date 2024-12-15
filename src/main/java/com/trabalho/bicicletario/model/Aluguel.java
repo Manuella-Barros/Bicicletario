@@ -30,6 +30,7 @@ public class Aluguel {
     public Aluguel(int ciclista, int trancaInicio) {
         this.ciclista = ciclista;
         this.trancaInicio = trancaInicio;
+
     }
 
     public Aluguel() {

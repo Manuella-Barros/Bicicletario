@@ -37,4 +37,19 @@ public class AluguelService {
         Aluguel aluguel = aluguelRepository.findByCiclista(ciclistaId);
         return ResponseEntity.ok(aluguel);
     }
+
+    public ResponseEntity<Aluguel> getAluguelByBicicletaId(int bicicletaId) {
+
+
+        Aluguel aluguel = aluguelRepository.findByBicicleta(bicicletaId);
+
+        LocalDateTime dataAtual = LocalDateTime.now();
+        aluguel.setHoraFim(dataAtual);
+        aluguel.setCobranca(20.00);
+
+        Aluguel createdAluguel = aluguelRepository.save(aluguel);
+
+        return ResponseEntity.ok(createdAluguel);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.dto.RealizarAluguelDTO;
+import com.trabalho.bicicletario.dto.RealizarDevolucaoDTO;
 import com.trabalho.bicicletario.model.Aluguel;
 import com.trabalho.bicicletario.service.AluguelService;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,17 @@ public class AluguelController {
     public ResponseEntity<Aluguel> realizarAluguel(@RequestBody RealizarAluguelDTO newAluguelDTO) {
         Aluguel newAluguel = new Aluguel(newAluguelDTO.getCiclista(), newAluguelDTO.getTrancaInicio());
         ResponseEntity<Aluguel> aluguel = aluguelService.createAluguel(newAluguel);
+
+        if(aluguel.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(aluguel.getStatusCode());
+        }
+
+        return ResponseEntity.ok(aluguel.getBody());
+    }
+
+    @PostMapping("/devolucao")
+    public ResponseEntity<Aluguel> realizarDevolucao(@RequestBody RealizarDevolucaoDTO newDevolucaoDTO) {
+        ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelByBicicletaId(newDevolucaoDTO.getIdBicicleta());
 
         if(aluguel.getStatusCode() != HttpStatus.OK) {
             return new ResponseEntity<>(aluguel.getStatusCode());
