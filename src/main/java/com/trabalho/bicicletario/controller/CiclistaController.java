@@ -112,4 +112,14 @@ public class CiclistaController {
         return ResponseEntity.ok(bicicleta);
     }
 
+    @PostMapping("/{idCiclista}/ativar")
+    public ResponseEntity<Ciclista> ativarCadastro(@PathVariable int idCiclista){
+        ResponseEntity<Ciclista> ciclista = ciclistaService.ativarCadastro(idCiclista);
+
+        if (ciclista.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(ciclista.getStatusCode());
+        }
+
+        return ciclista;
+    }
 }

@@ -1,6 +1,5 @@
 package com.trabalho.bicicletario.service;
 
-import com.trabalho.bicicletario.model.Bicicleta;
 import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.StatusCiclista;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
@@ -53,9 +52,9 @@ public class CiclistaService {
         }
 
         updateCiclista.setId(id);
-        this.createCiclista(updateCiclista);
+        Ciclista updatedCiclista = ciclistaRepository.save( updateCiclista );
 
-        return ResponseEntity.ok(updateCiclista);
+        return ResponseEntity.ok(updatedCiclista);
     }
 
     public ResponseEntity<Boolean> emailExists(String email) {
@@ -78,5 +77,23 @@ public class CiclistaService {
         }
 
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<Ciclista> ativarCadastro(int id) {
+        if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
+
+        if(!optionalCiclista.isPresent()){ // TODO - NÃO ENCONTRADO - 404
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        optionalCiclista.get().setStatus(StatusCiclista.ATIVO.getDescricao());
+
+        Ciclista updatedCiclista = ciclistaRepository.save( optionalCiclista.get() );
+
+        return ResponseEntity.ok(updatedCiclista);
     }
 }
