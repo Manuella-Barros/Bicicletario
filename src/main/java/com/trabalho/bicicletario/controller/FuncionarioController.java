@@ -1,6 +1,7 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.exception.CustomException;
+import com.trabalho.bicicletario.model.Error;
 import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.service.FuncionarioService;
@@ -37,15 +38,19 @@ public class FuncionarioController {
 
     @GetMapping("/{idFuncionario}")
     public ResponseEntity<Funcionario> recuperarFuncionario(@PathVariable int idFuncionario) throws CustomException {
-        ResponseEntity<Funcionario> funcionario = funcionarioService.getFuncionarioById(idFuncionario);
+        try{
+            ResponseEntity<Funcionario> funcionario = funcionarioService.getFuncionarioById(idFuncionario);
 
-        if(funcionario.getStatusCode() != HttpStatus.OK) {
-            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
-
+            if(funcionario.getStatusCode() != HttpStatus.OK) {
+                throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
 //            return new ResponseEntity<>(funcionario.getStatusCode());
+            }
+
+            return ResponseEntity.ok(funcionario.getBody());
+        }catch (CustomException e) {
+            throw new CustomException(e);
         }
 
-        return ResponseEntity.ok(funcionario.getBody());
     }
 
     @PutMapping("/{idFuncionario}")

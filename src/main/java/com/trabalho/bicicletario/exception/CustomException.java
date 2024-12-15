@@ -16,6 +16,13 @@ public class CustomException extends Exception {
         this.status = errorEnum.getStatus();
     }
 
+    public CustomException(CustomException customException) {
+        super(customException.getMensagem());
+        this.codigo = customException.getCodigo();
+        this.mensagem = customException.getMensagem();
+        this.status = customException.getStatus();
+    }
+
     public String getMensagem() {
         return mensagem;
     }
