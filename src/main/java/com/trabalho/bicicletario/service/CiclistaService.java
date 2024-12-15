@@ -1,7 +1,7 @@
 package com.trabalho.bicicletario.service;
 
 import com.trabalho.bicicletario.model.Ciclista;
-import com.trabalho.bicicletario.model.StatusCiclista;
+import com.trabalho.bicicletario.model.StatusCiclistaEnum;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class CiclistaService {
     }
 
     public ResponseEntity<Ciclista> createCiclista(Ciclista ciclista ) {
-        ciclista.setStatus(StatusCiclista.AGUARDANDO_CONFIRMACAO.getDescricao());
+        ciclista.setStatus(StatusCiclistaEnum.AGUARDANDO_CONFIRMACAO.getDescricao());
 
         if(!ciclista.checkIfValid()){ // TODO - ERRO ALGUM CAMPO VAZIO - 422
             return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -90,7 +90,7 @@ public class CiclistaService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        optionalCiclista.get().setStatus(StatusCiclista.ATIVO.getDescricao());
+        optionalCiclista.get().setStatus(StatusCiclistaEnum.ATIVO.getDescricao());
 
         Ciclista updatedCiclista = ciclistaRepository.save( optionalCiclista.get() );
 

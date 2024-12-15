@@ -1,5 +1,7 @@
 package com.trabalho.bicicletario.service;
 
+import com.trabalho.bicicletario.exception.CustomException;
+import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.repository.FuncionarioRepository;
 import org.springframework.http.HttpStatus;

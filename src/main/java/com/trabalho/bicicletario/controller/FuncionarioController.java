@@ -1,5 +1,7 @@
 package com.trabalho.bicicletario.controller;
 
+import com.trabalho.bicicletario.exception.CustomException;
+import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.service.FuncionarioService;
 import org.springframework.http.HttpStatus;
@@ -34,11 +36,13 @@ public class FuncionarioController {
     }
 
     @GetMapping("/{idFuncionario}")
-    public ResponseEntity<Funcionario> recuperarFuncionario(@PathVariable int idFuncionario) {
+    public ResponseEntity<Funcionario> recuperarFuncionario(@PathVariable int idFuncionario) throws CustomException {
         ResponseEntity<Funcionario> funcionario = funcionarioService.getFuncionarioById(idFuncionario);
 
         if(funcionario.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(funcionario.getStatusCode());
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+
+//            return new ResponseEntity<>(funcionario.getStatusCode());
         }
 
         return ResponseEntity.ok(funcionario.getBody());
