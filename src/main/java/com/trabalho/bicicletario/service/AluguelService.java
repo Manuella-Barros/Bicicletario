@@ -1,6 +1,8 @@
 package com.trabalho.bicicletario.service;
 
+import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Aluguel;
+import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.repository.AluguelRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,9 @@ public class AluguelService {
         this.aluguelRepository = aluguelRepository;
     }
 
-    public ResponseEntity<Aluguel> createAluguel(Aluguel aluguel ) {
-        if(!aluguel.checkIfValid()){ // TODO - DADOS INVALIDOS - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Aluguel> createAluguel(Aluguel aluguel ) throws CustomException {
+        if(!aluguel.checkIfValid()){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         LocalDateTime dataAtual = LocalDateTime.now();
@@ -29,9 +31,9 @@ public class AluguelService {
         return ResponseEntity.ok(createdAluguel);
     }
 
-    public ResponseEntity<Aluguel> getAluguelByCiclistaId(int ciclistaId) {
-        if(ciclistaId <= 0){ // TODO - ERRO ID INVÁLIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Aluguel> getAluguelByCiclistaId(int ciclistaId) throws CustomException {
+        if(ciclistaId <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Aluguel aluguel = aluguelRepository.findByCiclista(ciclistaId);
@@ -39,8 +41,6 @@ public class AluguelService {
     }
 
     public ResponseEntity<Aluguel> getAluguelByBicicletaId(int bicicletaId) {
-
-
         Aluguel aluguel = aluguelRepository.findByBicicleta(bicicletaId);
 
         LocalDateTime dataAtual = LocalDateTime.now();
@@ -51,5 +51,4 @@ public class AluguelService {
 
         return ResponseEntity.ok(createdAluguel);
     }
-
 }

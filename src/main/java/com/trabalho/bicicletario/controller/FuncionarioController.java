@@ -1,8 +1,6 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.exception.CustomException;
-import com.trabalho.bicicletario.model.Error;
-import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.service.FuncionarioService;
 import org.springframework.http.HttpStatus;
@@ -19,14 +17,14 @@ public class FuncionarioController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody Funcionario newFuncionario) {
-        ResponseEntity<Funcionario> funcionario = funcionarioService.createFuncionario(newFuncionario);
+    public ResponseEntity<Funcionario> cadastrarFuncionario(@RequestBody Funcionario newFuncionario) throws CustomException {
+        try {
+            ResponseEntity<Funcionario> funcionario = funcionarioService.createFuncionario(newFuncionario);
 
-        if(funcionario.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(funcionario.getStatusCode());
+            return ResponseEntity.ok(funcionario.getBody());
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ResponseEntity.ok(funcionario.getBody());
     }
 
     @GetMapping("")
@@ -41,37 +39,35 @@ public class FuncionarioController {
         try{
             ResponseEntity<Funcionario> funcionario = funcionarioService.getFuncionarioById(idFuncionario);
 
-            if(funcionario.getStatusCode() != HttpStatus.OK) {
-                throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
-//            return new ResponseEntity<>(funcionario.getStatusCode());
-            }
-
             return ResponseEntity.ok(funcionario.getBody());
-        }catch (CustomException e) {
+        } catch (CustomException e) {
             throw new CustomException(e);
         }
-
     }
 
     @PutMapping("/{idFuncionario}")
-    public ResponseEntity<Funcionario> editarFuncionario(@PathVariable int idFuncionario, @RequestBody Funcionario updateFuncionario) {
-        ResponseEntity<Funcionario> funcionario = funcionarioService.updateFuncionario(idFuncionario, updateFuncionario);
+    public ResponseEntity<Funcionario> editarFuncionario(@PathVariable int idFuncionario, @RequestBody Funcionario updateFuncionario) throws CustomException {
+        try{
+            ResponseEntity<Funcionario> funcionario = funcionarioService.updateFuncionario(idFuncionario, updateFuncionario);
 
-        if(funcionario.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(funcionario.getStatusCode());
+            if(funcionario.getStatusCode() != HttpStatus.OK) {
+                return new ResponseEntity<>(funcionario.getStatusCode());
+            }
+
+            return ResponseEntity.ok(funcionario.getBody());
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ResponseEntity.ok(funcionario.getBody());
     }
 
     @DeleteMapping("/{idFuncionario}")
-    public ResponseEntity removerFuncionario(@PathVariable int idFuncionario) {
-        ResponseEntity funcionario = funcionarioService.removeFuncionario(idFuncionario);
+    public ResponseEntity removerFuncionario(@PathVariable int idFuncionario) throws CustomException {
+        try{
+            funcionarioService.removeFuncionario(idFuncionario);
 
-        if(funcionario.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(funcionario.getStatusCode());
+            return ResponseEntity.ok().build();
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ResponseEntity.ok().build();
     }
 }

@@ -3,7 +3,6 @@ import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.repository.FuncionarioRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,9 @@ public class FuncionarioService {
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public ResponseEntity<Funcionario> createFuncionario(Funcionario funcionario ) {
-        if(!funcionario.checkIfValid()){ // TODO - ERRO ALGUM CAMPO VAZIO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Funcionario> createFuncionario(Funcionario funcionario ) throws CustomException {
+        if(!funcionario.checkIfValid()){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Funcionario createdFuncionario = funcionarioRepository.save( funcionario );
@@ -32,27 +31,27 @@ public class FuncionarioService {
         return ResponseEntity.ok(iterableFuncionario);
     }
 
-    public ResponseEntity<Funcionario> getFuncionarioById(int id) {
-        if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Funcionario> getFuncionarioById(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById( id );
 
-        if(!optionalFuncionario.isPresent()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!optionalFuncionario.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         return ResponseEntity.ok(optionalFuncionario.get());
     }
 
-    public ResponseEntity<Funcionario> updateFuncionario(int id, Funcionario updateFuncionario) {
-        if(!updateFuncionario.checkIfValid() || id <= 0){ // TODO - ERRO ALGUM CAMPO INVALIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Funcionario> updateFuncionario(int id, Funcionario updateFuncionario) throws CustomException {
+        if(!updateFuncionario.checkIfValid() || id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
-        if(!this.getFuncionarioById(id).hasBody()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!this.getFuncionarioById(id).hasBody()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         updateFuncionario.setId(id);
@@ -61,13 +60,13 @@ public class FuncionarioService {
         return ResponseEntity.ok(updateFuncionario);
     }
 
-    public ResponseEntity removeFuncionario(int id) {
-        if(id <= 0){ // TODO - Dados Inválidos - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity removeFuncionario(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
-        if(!this.getFuncionarioById(id).hasBody()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!this.getFuncionarioById(id).hasBody()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         funcionarioRepository.deleteById(id);

@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorEnum {
     CICLISTA_CRIADO("Ciclista cadastrado", "201", HttpStatus.CREATED),
     REQUISICAO_MAL_FORMADA("Requisição mal formada", "404", HttpStatus.NOT_FOUND),
-    DADOS_INVALIDOS("Dados Inválidos", "422", HttpStatus.UNPROCESSABLE_ENTITY),;
+    DADOS_INVALIDOS("Dados Inválidos", "422", HttpStatus.UNPROCESSABLE_ENTITY),
+    EMAIL_VAZIO("Email não enviado como parâmetro", "400", HttpStatus.BAD_REQUEST );
 
     private String mensagem;
     private String codigo;

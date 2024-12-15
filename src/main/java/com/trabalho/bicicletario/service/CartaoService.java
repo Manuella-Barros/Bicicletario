@@ -1,8 +1,9 @@
 package com.trabalho.bicicletario.service;
 
+import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Cartao;
+import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.repository.CartaoRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -16,36 +17,38 @@ public class CartaoService {
         this.cartaoRepository = cartaoRepository;
     }
 
-    public ResponseEntity<Cartao> createCartao(Cartao cartao ) {
-        if(!cartao.checkIfValid()){ // TODO - DADOS INVALIDOS - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Cartao> createCartao(Cartao cartao ) throws CustomException {
+        if(!cartao.checkIfValid()){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Cartao createdCartao = cartaoRepository.save(cartao);
         return ResponseEntity.ok(createdCartao);
     }
 
-    public ResponseEntity<Cartao> getCartaoById(int id) {
-        if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Cartao> getCartaoById(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Optional<Cartao> optionalCartao = cartaoRepository.findById( id );
 
-        if(!optionalCartao.isPresent()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!optionalCartao.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         return ResponseEntity.ok(optionalCartao.get());
     }
 
-    public ResponseEntity<Cartao> updateCartao(int id, Cartao updateCartao) {
-        if(!updateCartao.checkIfValid() || id <= 0){ // TODO - ERRO ALGUM CAMPO INVALIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Cartao> updateCartao(int id, Cartao updateCartao) throws CustomException {
+        if(!updateCartao.checkIfValid() || id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+
         }
 
-        if(!this.getCartaoById(id).hasBody()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!this.getCartaoById(id).hasBody()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+
         }
 
         updateCartao.setId(id);

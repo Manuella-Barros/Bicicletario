@@ -1,12 +1,12 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.dto.CadastrarCiclistaDTO;
+import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.service.AluguelService;
 import com.trabalho.bicicletario.service.CartaoService;
 import com.trabalho.bicicletario.service.CiclistaService;
 import com.trabalho.bicicletario.service.PassaporteService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,100 +26,84 @@ public class CiclistaController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Ciclista> cadastrarCiclista(@RequestBody CadastrarCiclistaDTO newCiclista) {
-        ResponseEntity<Cartao> cartao = cartaoService.createCartao(newCiclista.meioDePagamento);
+    public ResponseEntity<Ciclista> cadastrarCiclista(@RequestBody CadastrarCiclistaDTO newCiclista) throws CustomException {
+        try{
+            ResponseEntity<Cartao> cartao = cartaoService.createCartao(newCiclista.meioDePagamento);
+            newCiclista.ciclistaDTO.setIdCartao(cartao.getBody().getId());
 
-        if(cartao.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(cartao.getStatusCode());
-        }
-
-        newCiclista.ciclistaDTO.setIdCartao(cartao.getBody().getId());
-
-        ResponseEntity<Passaporte> passaporte = passaporteService.createPassaporte(newCiclista.ciclistaDTO.getPassaporte());
-
-        if(passaporte.getStatusCode() == HttpStatus.OK) {
+            ResponseEntity<Passaporte> passaporte = passaporteService.createPassaporte(newCiclista.ciclistaDTO.getPassaporte());
             newCiclista.ciclistaDTO.setPassaporte(passaporte.getBody());
             newCiclista.ciclistaDTO.setIdPassaporte(passaporte.getBody().getId());
+
+            Ciclista ciclistaInfo = new Ciclista(newCiclista.ciclistaDTO);
+            ResponseEntity<Ciclista> ciclista = ciclistaService.createCiclista(ciclistaInfo);
+
+            return ResponseEntity.ok(ciclista.getBody());
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
 
-        if(passaporte.getStatusCode() != HttpStatus.OK && !newCiclista.ciclistaDTO.checkIfBrasileiro()) {
-            return new ResponseEntity<>(passaporte.getStatusCode());
-        }
-
-        Ciclista ciclistaInfo = new Ciclista(newCiclista.ciclistaDTO);
-        ResponseEntity<Ciclista> ciclista = ciclistaService.createCiclista(ciclistaInfo);
-
-        if(ciclista.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(ciclista.getStatusCode());
-        }
-
-        return ResponseEntity.ok(ciclista.getBody());
     }
 
     @GetMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
-    public ResponseEntity<Ciclista> recuperarCiclista(@PathVariable int idCiclista) {
-        ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(idCiclista);
+    public ResponseEntity<Ciclista> recuperarCiclista(@PathVariable int idCiclista) throws CustomException {
+        try{
+            ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(idCiclista);
 
-        if(ciclista.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(ciclista.getStatusCode());
+            return ResponseEntity.ok(ciclista.getBody());
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ResponseEntity.ok(ciclista.getBody());
     }
 
     @PutMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
-    public ResponseEntity<Ciclista> editarCiclista(@PathVariable int idCiclista, @RequestBody Ciclista updateCiclista) {
-        ResponseEntity<Ciclista> ciclista = ciclistaService.updateCiclista(idCiclista, updateCiclista);
+    public ResponseEntity<Ciclista> editarCiclista(@PathVariable int idCiclista, @RequestBody Ciclista updateCiclista) throws CustomException {
+        try{
+            ResponseEntity<Ciclista> ciclista = ciclistaService.updateCiclista(idCiclista, updateCiclista);
 
-        if(ciclista.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(ciclista.getStatusCode());
+            return ResponseEntity.ok(ciclista.getBody());
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ResponseEntity.ok(ciclista.getBody());
     }
 
     @GetMapping("/existeEmail/{email}")
-    public ResponseEntity<Boolean> verificarEmail(@PathVariable String email){
-        ResponseEntity<Boolean> exists = ciclistaService.emailExists(email);
+    public ResponseEntity<Boolean> verificarEmail(@PathVariable String email) throws CustomException {
+        try{
+            ResponseEntity<Boolean> exists = ciclistaService.emailExists(email);
 
-        if(exists.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(exists.getStatusCode());
+            return ResponseEntity.ok(exists.getBody());
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ResponseEntity.ok(exists.getBody());
     }
 
     @GetMapping("/{idCiclista}/bicicletaAlugada")
-    public ResponseEntity<Bicicleta> recuperarBicicleta(@PathVariable int idCiclista){
-        ResponseEntity Ciclista = ciclistaService.ciclistaExists(idCiclista);
+    public ResponseEntity<Bicicleta> recuperarBicicleta(@PathVariable int idCiclista) throws CustomException {
+        try{
+            ciclistaService.ciclistaExists(idCiclista);
+            ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelByCiclistaId(idCiclista);
 
-        if (Ciclista.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(Ciclista.getStatusCode());
+            if(!aluguel.hasBody()){
+                return ResponseEntity.ok().build();
+            }
+
+            Bicicleta bicicleta = new Bicicleta(aluguel.getBody().getBicicleta(), "Caloi", "Elite Carbon", "2023", 1234, "OCUPADA");
+
+            return ResponseEntity.ok(bicicleta);
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelByCiclistaId(idCiclista);
-
-        if(aluguel.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(aluguel.getStatusCode());
-        }
-
-        if(!aluguel.hasBody()){
-            return ResponseEntity.ok().build();
-        }
-
-        Bicicleta bicicleta = new Bicicleta(aluguel.getBody().getBicicleta(), "Caloi", "Elite Carbon", "2023", 1234, "OCUPADA");
-
-        return ResponseEntity.ok(bicicleta);
     }
 
     @PostMapping("/{idCiclista}/ativar")
-    public ResponseEntity<Ciclista> ativarCadastro(@PathVariable int idCiclista){
-        ResponseEntity<Ciclista> ciclista = ciclistaService.ativarCadastro(idCiclista);
+    public ResponseEntity<Ciclista> ativarCadastro(@PathVariable int idCiclista) throws CustomException {
+        try{
+            ResponseEntity<Ciclista> ciclista = ciclistaService.ativarCadastro(idCiclista);
 
-        if (ciclista.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(ciclista.getStatusCode());
+            return ciclista;
+        } catch (CustomException e) {
+            throw new CustomException(e);
         }
-
-        return ciclista;
     }
 }

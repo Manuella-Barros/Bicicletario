@@ -1,6 +1,8 @@
 package com.trabalho.bicicletario.service;
 
+import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Ciclista;
+import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.StatusCiclistaEnum;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
 import org.springframework.http.HttpStatus;
@@ -17,38 +19,38 @@ public class CiclistaService {
         this.ciclistaRepository = ciclistaRepository;
     }
 
-    public ResponseEntity<Ciclista> createCiclista(Ciclista ciclista ) {
+    public ResponseEntity<Ciclista> createCiclista(Ciclista ciclista ) throws CustomException {
         ciclista.setStatus(StatusCiclistaEnum.AGUARDANDO_CONFIRMACAO.getDescricao());
 
-        if(!ciclista.checkIfValid()){ // TODO - ERRO ALGUM CAMPO VAZIO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        if(!ciclista.checkIfValid()){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Ciclista createdCiclista = ciclistaRepository.save( ciclista );
         return ResponseEntity.ok(createdCiclista);
     }
 
-    public ResponseEntity<Ciclista> getCiclistaById(int id) {
-        if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Ciclista> getCiclistaById(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
-        if(!optionalCiclista.isPresent()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!optionalCiclista.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         return ResponseEntity.ok(optionalCiclista.get());
     }
 
-    public ResponseEntity<Ciclista> updateCiclista(int id, Ciclista updateCiclista) {
-        if(!updateCiclista.checkIfValid() || id <= 0){ // TODO - ERRO ALGUM CAMPO INVALIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Ciclista> updateCiclista(int id, Ciclista updateCiclista) throws CustomException {
+        if(!updateCiclista.checkIfValid() || id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
-        if(!this.getCiclistaById(id).hasBody()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!this.getCiclistaById(id).hasBody()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         updateCiclista.setId(id);
@@ -57,37 +59,37 @@ public class CiclistaService {
         return ResponseEntity.ok(updatedCiclista);
     }
 
-    public ResponseEntity<Boolean> emailExists(String email) {
-        if(email == null){ // TODO - Email não enviado como parâmetro - 400
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Boolean> emailExists(String email) throws CustomException {
+        if(email == null){
+            throw new CustomException(ErrorEnum.EMAIL_VAZIO);
         }
 
         return ResponseEntity.ok(ciclistaRepository.existsByEmail(email));
     }
 
-    public ResponseEntity<Boolean> ciclistaExists(int id) {
-        if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Boolean> ciclistaExists(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
-        if(!optionalCiclista.isPresent()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!optionalCiclista.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity<Ciclista> ativarCadastro(int id) {
-        if(id <= 0){ // TODO - ERRO ID INVÁLIDO - 422
-            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+    public ResponseEntity<Ciclista> ativarCadastro(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
-        if(!optionalCiclista.isPresent()){ // TODO - NÃO ENCONTRADO - 404
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(!optionalCiclista.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
         optionalCiclista.get().setStatus(StatusCiclistaEnum.ATIVO.getDescricao());
