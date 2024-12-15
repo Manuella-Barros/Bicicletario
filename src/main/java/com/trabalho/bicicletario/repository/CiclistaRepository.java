@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CiclistaRepository extends CrudRepository<Ciclista, Integer> {}
+public interface CiclistaRepository extends CrudRepository<Ciclista, Integer> {
+    boolean existsByEmail (String email);
+}

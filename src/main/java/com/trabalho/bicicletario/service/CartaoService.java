@@ -1,7 +1,6 @@
 package com.trabalho.bicicletario.service;
 
 import com.trabalho.bicicletario.model.Cartao;
-import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.repository.CartaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
