@@ -32,21 +32,6 @@ public class Ciclista {
     protected String senha;
     protected String status;
 
-    public Ciclista(int id, LocalDate nascimento, String nome, String cpf, String nacionalidade,
-                  String email, String urlFotoDocumento, String senha, String status, int idPassaporte, int idCartao) {
-        this.id = id;
-        this.nascimento = nascimento;
-        this.nome = nome;
-        this.cpf = cpf;
-        this.nacionalidade = nacionalidade;
-        this.email = email;
-        this.urlFotoDocumento = urlFotoDocumento;
-        this.senha = senha;
-        this.status = status;
-        this.idPassaporte = idPassaporte;
-        this.idCartao = idCartao;
-    }
-
     public Ciclista() {
 
     }
