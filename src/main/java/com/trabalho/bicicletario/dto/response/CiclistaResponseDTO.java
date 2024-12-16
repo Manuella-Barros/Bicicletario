@@ -35,66 +35,6 @@ public class CiclistaResponseDTO {
         this.id = id;
     }
 
-    public LocalDate getNascimento() {
-        return nascimento;
-    }
-
-    public void setNascimento(LocalDate nascimento) {
-        this.nascimento = nascimento;
-    }
-
-    public String getUrlFotoDocumento() {
-        return urlFotoDocumento;
-    }
-
-    public void setUrlFotoDocumento(String urlFotoDocumento) {
-        this.urlFotoDocumento = urlFotoDocumento;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getNacionalidade() {
-        return nacionalidade;
-    }
-
-    public void setNacionalidade(String nacionalidade) {
-        this.nacionalidade = nacionalidade;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Passaporte getPassaporte() {
-        return passaporte;
-    }
-
     public void setPassaporte(Passaporte passaporte) {
         this.passaporte = passaporte;
     }

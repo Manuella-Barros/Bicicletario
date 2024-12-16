@@ -1,7 +1,6 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.dto.CadastrarCiclistaDTO;
-import com.trabalho.bicicletario.dto.CiclistaDTO;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;

@@ -1,7 +1,5 @@
 package com.trabalho.bicicletario.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.trabalho.bicicletario.dto.CiclistaDTO;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -79,48 +77,24 @@ public class Ciclista {
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getCpf() {
         return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getNacionalidade() {
         return nacionalidade;
     }
 
-    public void setNacionalidade(String nacionalidade) {
-        this.nacionalidade = nacionalidade;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getUrlFotoDocumento() {
         return urlFotoDocumento;
     }
 
-    public void setUrlFotoDocumento(String urlFotoDocumento) {
-        this.urlFotoDocumento = urlFotoDocumento;
-    }
-
     public String getSenha() {
         return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
     }
 
     public String getStatus() {
@@ -133,10 +107,6 @@ public class Ciclista {
 
     public LocalDate getNascimento() {
         return nascimento;
-    }
-
-    public void setNascimento(LocalDate nascimento) {
-        this.nascimento = nascimento;
     }
 
     public int getIdPassaporte() {

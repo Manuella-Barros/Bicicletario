@@ -4,7 +4,6 @@ import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Aluguel;
 import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.repository.AluguelRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
