@@ -1,10 +1,15 @@
 package com.trabalho.bicicletario.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
+@RequiredArgsConstructor
+@Setter @Getter
 public class Cartao {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,51 +28,7 @@ public class Cartao {
         this.cvv = cvv;
     }
 
-    public Cartao() {
-
-    }
-
     public boolean checkIfValid(){
         return this.nomeTitular != null && this.numero != null && this.validade != null && this.cvv != null;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNomeTitular() {
-        return nomeTitular;
-    }
-
-    public void setNomeTitular(String nomeTitular) {
-        this.nomeTitular = nomeTitular;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
-    public LocalDate getValidade() {
-        return validade;
-    }
-
-    public void setValidade(LocalDate validade) {
-        this.validade = validade;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
     }
 }

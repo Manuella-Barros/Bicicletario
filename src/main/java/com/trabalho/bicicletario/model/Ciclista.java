@@ -2,10 +2,16 @@ package com.trabalho.bicicletario.model;
 
 import com.trabalho.bicicletario.dto.CiclistaDTO;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "ciclista")
+@RequiredArgsConstructor
+@Setter @Getter
 public class Ciclista {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
@@ -29,10 +35,6 @@ public class Ciclista {
 
     protected String senha;
     protected String status;
-
-    public Ciclista() {
-
-    }
 
     public Ciclista(CiclistaDTO ciclistaDTO) {
         this.id = ciclistaDTO.getId();
@@ -62,66 +64,5 @@ public class Ciclista {
 
     public boolean checkIfBrasileiro(){
         return nacionalidade.equalsIgnoreCase("brasileira") || nacionalidade.equalsIgnoreCase("brasileiro") || nacionalidade.equalsIgnoreCase("br");
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public String getNacionalidade() {
-        return nacionalidade;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getUrlFotoDocumento() {
-        return urlFotoDocumento;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public LocalDate getNascimento() {
-        return nascimento;
-    }
-
-    public int getIdPassaporte() {
-        return idPassaporte;
-    }
-
-    public void setIdPassaporte(int idPassaporte) {
-        this.idPassaporte = idPassaporte;
-    }
-
-    public int getIdCartao() {
-        return idCartao;
-    }
-
-    public void setIdCartao(int idCartao) {
-        this.idCartao = idCartao;
     }
 }

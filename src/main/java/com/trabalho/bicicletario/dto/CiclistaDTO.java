@@ -6,8 +6,6 @@ import com.trabalho.bicicletario.model.Passaporte;
 public class CiclistaDTO extends Ciclista {
     private Passaporte passaporte;
 
-    public CiclistaDTO() {}
-
     public Passaporte getPassaporte() {
         return passaporte;
     }

@@ -60,7 +60,7 @@ public class FuncionarioService {
         return ResponseEntity.ok(updateFuncionario);
     }
 
-    public ResponseEntity removeFuncionario(int id) throws CustomException {
+    public ResponseEntity<Void> removeFuncionario(int id) throws CustomException {
         if(id <= 0){
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }

@@ -61,7 +61,7 @@ public class FuncionarioController {
     }
 
     @DeleteMapping("/{idFuncionario}")
-    public ResponseEntity removerFuncionario(@PathVariable int idFuncionario) throws CustomException {
+    public ResponseEntity<Void> removerFuncionario(@PathVariable int idFuncionario) throws CustomException {
         try{
             funcionarioService.removeFuncionario(idFuncionario);
 
