@@ -1,6 +1,8 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.dto.CadastrarCiclistaDTO;
+import com.trabalho.bicicletario.dto.CiclistaDTO;
+import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.service.AluguelService;
@@ -26,7 +28,7 @@ public class CiclistaController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Ciclista> cadastrarCiclista(@RequestBody CadastrarCiclistaDTO newCiclista) throws CustomException {
+    public ResponseEntity<CiclistaResponseDTO> cadastrarCiclista(@RequestBody CadastrarCiclistaDTO newCiclista) throws CustomException {
         try{
             ResponseEntity<Cartao> cartao = cartaoService.createCartao(newCiclista.meioDePagamento);
             newCiclista.ciclistaDTO.setIdCartao(cartao.getBody().getId());
@@ -38,19 +40,25 @@ public class CiclistaController {
             Ciclista ciclistaInfo = new Ciclista(newCiclista.ciclistaDTO);
             ResponseEntity<Ciclista> ciclista = ciclistaService.createCiclista(ciclistaInfo);
 
-            return ResponseEntity.ok(ciclista.getBody());
+            CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
+            response.setPassaporte(passaporte.getBody());
+
+            return ResponseEntity.ok(response);
         } catch (CustomException e) {
             throw new CustomException(e);
         }
-
     }
 
     @GetMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
-    public ResponseEntity<Ciclista> recuperarCiclista(@PathVariable int idCiclista) throws CustomException {
+    public ResponseEntity<CiclistaResponseDTO> recuperarCiclista(@PathVariable int idCiclista) throws CustomException {
         try{
             ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(idCiclista);
+            ResponseEntity<Passaporte> passaporte = passaporteService.getPassaporteById(ciclista.getBody().getIdPassaporte());
 
-            return ResponseEntity.ok(ciclista.getBody());
+            CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
+            response.setPassaporte(passaporte.getBody());
+
+            return ResponseEntity.ok(response);
         } catch (CustomException e) {
             throw new CustomException(e);
         }

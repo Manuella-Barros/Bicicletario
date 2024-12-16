@@ -1,5 +1,7 @@
 package com.trabalho.bicicletario.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.trabalho.bicicletario.dto.CiclistaDTO;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -8,29 +10,27 @@ import java.time.LocalDate;
 @Table(name = "ciclista")
 public class Ciclista {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    protected int id;
 
     @Column(name = "data_nascimento")
-    private LocalDate nascimento;
+    protected LocalDate nascimento;
 
     @Column(name = "id_passaporte")
-    private int idPassaporte;
+    protected int idPassaporte;
 
     @Column(name = "id_cartao")
-    private int idCartao;
+    protected int idCartao;
 
     @Column(name = "url_foto_documento")
-    private String urlFotoDocumento;
+    protected String urlFotoDocumento;
 
-    private String nome;
-    private String cpf;
-    private String nacionalidade;
-    private String email;
+    protected String nome;
+    protected String cpf;
+    protected String nacionalidade;
+    protected String email;
 
-    private String senha;
-    private String status;
-
-
+    protected String senha;
+    protected String status;
 
     public Ciclista(int id, LocalDate nascimento, String nome, String cpf, String nacionalidade,
                   String email, String urlFotoDocumento, String senha, String status, int idPassaporte, int idCartao) {
