@@ -1,13 +1,13 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.dto.CadastrarCiclistaDTO;
+import com.trabalho.bicicletario.dto.CiclistaDTO;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
-import com.trabalho.bicicletario.service.AluguelService;
-import com.trabalho.bicicletario.service.CartaoService;
-import com.trabalho.bicicletario.service.CiclistaService;
-import com.trabalho.bicicletario.service.PassaporteService;
+import com.trabalho.bicicletario.model.integracoes.Cobranca;
+import com.trabalho.bicicletario.model.integracoes.Email;
+import com.trabalho.bicicletario.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +29,13 @@ public class CiclistaController {
     @PostMapping("")
     public ResponseEntity<CiclistaResponseDTO> cadastrarCiclista(@RequestBody CadastrarCiclistaDTO newCiclista) throws CustomException {
         try{
+            Cobranca cobranca = new Cobranca();
+            Email email = new Email();
+
+            if(!cobranca.validarCartao(newCiclista.meioDePagamento)){
+                throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+            }
+
             ResponseEntity<Cartao> cartao = cartaoService.createCartao(newCiclista.meioDePagamento);
             newCiclista.ciclistaDTO.setIdCartao(cartao.getBody().getId());
 
@@ -42,13 +49,17 @@ public class CiclistaController {
             CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
             response.setPassaporte(passaporte.getBody());
 
+            if(email.enviarEmail(newCiclista.ciclistaDTO.getEmail(), "Cadastro realizado!", "Seu cadastro foi realizado com sucesso!") != null){
+                throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+            }
+
             return ResponseEntity.ok(response);
         } catch (CustomException e) {
             throw new CustomException(e);
         }
     }
 
-    @GetMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
+    @GetMapping("/{idCiclista}")
     public ResponseEntity<CiclistaResponseDTO> recuperarCiclista(@PathVariable int idCiclista) throws CustomException {
         try{
             ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(idCiclista);
@@ -63,12 +74,17 @@ public class CiclistaController {
         }
     }
 
-    @PutMapping("/{idCiclista}") // TODO - NÃO CONSEGUI TERMINAR, REPENSAR MELHOR E VOLTAR!!
-    public ResponseEntity<Ciclista> editarCiclista(@PathVariable int idCiclista, @RequestBody Ciclista updateCiclista) throws CustomException {
+    @PutMapping("/{idCiclista}")
+    public ResponseEntity<CiclistaResponseDTO> editarCiclista(@PathVariable int idCiclista, @RequestBody CiclistaDTO updateCiclistaDTO) throws CustomException {
         try{
+            Ciclista updateCiclista = new Ciclista(updateCiclistaDTO);
             ResponseEntity<Ciclista> ciclista = ciclistaService.updateCiclista(idCiclista, updateCiclista);
+            ResponseEntity<Passaporte> passaporte = passaporteService.updatePassaporte(ciclista.getBody().getIdPassaporte(), updateCiclistaDTO.getPassaporte());
 
-            return ResponseEntity.ok(ciclista.getBody());
+            CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
+            response.setPassaporte(passaporte.getBody());
+
+            return ResponseEntity.ok(response);
         } catch (CustomException e) {
             throw new CustomException(e);
         }
@@ -113,4 +129,15 @@ public class CiclistaController {
             throw new CustomException(e);
         }
     }
+
+//    @PostMapping("/{idCiclista}/permiteAluguel")
+//    public ResponseEntity<Boolean> permiteAluguel(@PathVariable int idCiclista) throws CustomException {
+//        try{
+//            ResponseEntity<Ciclista> ciclista = ciclistaService.ativarCadastro(idCiclista);
+//
+//            return ciclista;
+//        } catch (CustomException e) {
+//            throw new CustomException(e);
+//        }
+//    }
 }

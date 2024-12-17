@@ -6,7 +6,15 @@ public enum ErrorEnum {
     CICLISTA_CRIADO("Ciclista cadastrado", "201", HttpStatus.CREATED),
     REQUISICAO_MAL_FORMADA("Requisição mal formada", "404", HttpStatus.NOT_FOUND),
     DADOS_INVALIDOS("Dados Inválidos", "422", HttpStatus.UNPROCESSABLE_ENTITY),
-    EMAIL_VAZIO("Email não enviado como parâmetro", "400", HttpStatus.BAD_REQUEST );
+    EMAIL_VAZIO("Email não enviado como parâmetro", "400", HttpStatus.BAD_REQUEST ),
+    CICLISTA_INATIVO("Cadastro do ciclista não está ativo", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    BICICLETA_EM_REPARO("A bicicleta está em reparo", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    JA_TEM_ALUGUEL("O clicista já possui aluguel", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    PAGAMENTO_NAO_AUTORIZADO("O pagamento não foi autorizado", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    TRANCA_INVALIDA("A tranca inserida é inválida", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    BICICLETA_INVALIDA("A bicicleta inserida é inválida", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    TRANCA_SEM_ESSA_BICICLETA("A tranca inserida não possui essa bicicleta", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    NAO_DESTRANCOU("Não foi possível destrancar a tranca", "422", HttpStatus.UNPROCESSABLE_ENTITY );
 
     private String mensagem;
     private String codigo;

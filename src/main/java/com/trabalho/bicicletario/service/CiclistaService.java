@@ -5,7 +5,6 @@ import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.StatusCiclistaEnum;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +48,17 @@ public class CiclistaService {
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
-        if(!this.getCiclistaById(id).hasBody()){
+        Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
+
+        if(!optionalCiclista.isPresent()){
             throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
         }
 
-        updateCiclista.setId(id);
+        updateCiclista.setId(optionalCiclista.get().getId());
+        updateCiclista.setStatus(optionalCiclista.get().getStatus());
+        updateCiclista.setIdCartao(optionalCiclista.get().getIdCartao());
+        updateCiclista.setIdPassaporte(optionalCiclista.get().getIdPassaporte());
+
         Ciclista updatedCiclista = ciclistaRepository.save( updateCiclista );
 
         return ResponseEntity.ok(updatedCiclista);
@@ -97,5 +102,11 @@ public class CiclistaService {
         Ciclista updatedCiclista = ciclistaRepository.save( optionalCiclista.get() );
 
         return ResponseEntity.ok(updatedCiclista);
+    }
+
+    public boolean isCiclistaAtivo(int id) throws CustomException {
+        ResponseEntity<Ciclista> ciclista = this.getCiclistaById(id);
+
+        return ciclista.getBody().getStatus().equals(StatusCiclistaEnum.ATIVO.getDescricao());
     }
 }

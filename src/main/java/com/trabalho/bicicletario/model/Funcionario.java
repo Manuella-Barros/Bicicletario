@@ -1,5 +1,6 @@
 package com.trabalho.bicicletario.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Setter @Getter
 public class Funcionario {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @JsonIgnore
     private int id;
     private String senha;
 

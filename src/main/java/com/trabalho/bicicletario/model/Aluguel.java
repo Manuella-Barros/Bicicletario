@@ -33,13 +33,14 @@ public class Aluguel {
     private LocalDateTime horaFim;
     private double cobranca;
 
-    public Aluguel(int ciclista, int trancaInicio) {
+    public Aluguel(int ciclista, int trancaInicio, int bicicleta) {
         this.ciclista = ciclista;
         this.trancaInicio = trancaInicio;
+        this.bicicleta = bicicleta;
     }
 
     public boolean checkIfValid(){
-        return this.ciclista > 0 && this.trancaInicio > 0;
+        return this.trancaInicio > 0;
     }
 
 }

@@ -51,7 +51,7 @@ public class Ciclista {
     }
 
     public boolean checkIfValid(){
-        if(nascimento == null || nome == null || nacionalidade == null || email == null || urlFotoDocumento == null || senha == null || idCartao <= 0){
+        if(nascimento == null || nome == null || nacionalidade == null || email == null || urlFotoDocumento == null || senha == null){
             return false;
         }
 

@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface AluguelRepository extends CrudRepository<Aluguel, Integer> {
     Aluguel findByCiclista(int id);
     Aluguel findByBicicleta(int id);
+    Aluguel findByBicicletaAndTrancaInicio(int bicicleta, int trancaInicio);
 }
