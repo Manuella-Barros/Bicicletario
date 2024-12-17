@@ -44,7 +44,7 @@ public class Bicicleta {
 
     public Bicicleta getBicicleta(int idBicicleta){
         this.id = idBicicleta;
-        return new Bicicleta(id, marca, modelo, ano, numero, status);
+        return new Bicicleta();
     }
 
     public Bicicleta cadastrarBicicleta(Bicicleta bicicleta){
