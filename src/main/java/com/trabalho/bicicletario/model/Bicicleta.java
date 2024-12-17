@@ -38,10 +38,12 @@ public class Bicicleta {
     }
 
     public Bicicleta alterarStatusBicicleta(String status, int idBicicleta){
+        this.id = idBicicleta;
         return new Bicicleta(id, marca, modelo, ano, numero, status);
     }
 
     public Bicicleta getBicicleta(int idBicicleta){
+        this.id = idBicicleta;
         return new Bicicleta(id, marca, modelo, ano, numero, status);
     }
 

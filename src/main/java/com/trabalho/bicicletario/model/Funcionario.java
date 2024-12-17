@@ -25,16 +25,15 @@ public class Funcionario {
     private String cpf;
     private int matricula;
 
-    public Funcionario(String senha, String confirmacaoSenha, String email, String nome,
-                       int idade, String funcao, String cpf, int matricula) {
-        this.matricula = matricula;
-        this.nome = nome;
-        this.idade = idade;
-        this.funcao = funcao;
-        this.email = email;
-        this.senha = senha;
-        this.confirmacaoSenha = confirmacaoSenha;
-        this.cpf = cpf;
+    public Funcionario(Funcionario funcionario) {
+        this.matricula = funcionario.getMatricula();
+        this.nome = funcionario.getNome();
+        this.idade = funcionario.getIdade();
+        this.funcao = funcionario.getFuncao();
+        this.email = funcionario.getEmail();
+        this.senha = funcionario.getSenha();
+        this.confirmacaoSenha = funcionario.confirmacaoSenha;
+        this.cpf = funcionario.getCpf();
     }
 
     public boolean checkIfValid(){

@@ -148,7 +148,7 @@ public class AluguelService {
             meiaHora++;
         }
 
-        return meiaHora * 5;
+        return (double) meiaHora * 5;
 
     }
 }
