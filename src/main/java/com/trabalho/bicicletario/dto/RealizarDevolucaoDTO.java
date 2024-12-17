@@ -4,8 +4,8 @@ public class RealizarDevolucaoDTO {
     private int idBicicleta;
     private int idTranca;
 
-    public RealizarDevolucaoDTO(int ciclista, int trancaInicio) {
-        this.idBicicleta = ciclista;
+    public RealizarDevolucaoDTO(int idBicicleta, int trancaInicio) {
+        this.idBicicleta = idBicicleta;
         this.idTranca = trancaInicio;
     }
 

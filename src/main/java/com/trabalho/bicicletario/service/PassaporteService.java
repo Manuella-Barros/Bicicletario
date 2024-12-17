@@ -28,7 +28,7 @@ public class PassaporteService {
 
     public ResponseEntity<Passaporte> getPassaporteById(int id) throws CustomException {
         if(id <= 0){
-            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+            return null;
         }
 
         Optional<Passaporte> optionalPassaporte = passaporteRepository.findById( id );

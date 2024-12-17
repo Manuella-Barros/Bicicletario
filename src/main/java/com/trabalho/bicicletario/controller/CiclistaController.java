@@ -5,8 +5,6 @@ import com.trabalho.bicicletario.dto.CiclistaDTO;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
-import com.trabalho.bicicletario.model.integracoes.Cobranca;
-import com.trabalho.bicicletario.model.integracoes.Email;
 import com.trabalho.bicicletario.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,31 +27,12 @@ public class CiclistaController {
     @PostMapping("")
     public ResponseEntity<CiclistaResponseDTO> cadastrarCiclista(@RequestBody CadastrarCiclistaDTO newCiclista) throws CustomException {
         try{
-            Cobranca cobranca = new Cobranca();
-            Email email = new Email();
-
-            if(!cobranca.validarCartao(newCiclista.meioDePagamento)){
-                throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
-            }
-
-            ResponseEntity<Cartao> cartao = cartaoService.createCartao(newCiclista.meioDePagamento);
-            newCiclista.ciclistaDTO.setIdCartao(cartao.getBody().getId());
-
-            ResponseEntity<Passaporte> passaporte = passaporteService.createPassaporte(newCiclista.ciclistaDTO.getPassaporte());
-            newCiclista.ciclistaDTO.setPassaporte(passaporte.getBody());
-            newCiclista.ciclistaDTO.setIdPassaporte(passaporte.getBody().getId());
-
             Ciclista ciclistaInfo = new Ciclista(newCiclista.ciclistaDTO);
-            ResponseEntity<Ciclista> ciclista = ciclistaService.createCiclista(ciclistaInfo);
+            Cartao cartao = new Cartao(newCiclista.meioDePagamento);
+            Passaporte passaporte = new Passaporte(newCiclista.ciclistaDTO.getPassaporte());
+            ResponseEntity<CiclistaResponseDTO> ciclista = ciclistaService.createCiclista(ciclistaInfo, cartao, passaporte);
 
-            CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
-            response.setPassaporte(passaporte.getBody());
-
-            if(email.enviarEmail(newCiclista.ciclistaDTO.getEmail(), "Cadastro realizado!", "Seu cadastro foi realizado com sucesso!") != null){
-                throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
-            }
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ciclista.getBody());
         } catch (CustomException e) {
             throw new CustomException(e);
         }
@@ -62,13 +41,9 @@ public class CiclistaController {
     @GetMapping("/{idCiclista}")
     public ResponseEntity<CiclistaResponseDTO> recuperarCiclista(@PathVariable int idCiclista) throws CustomException {
         try{
-            ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(idCiclista);
-            ResponseEntity<Passaporte> passaporte = passaporteService.getPassaporteById(ciclista.getBody().getIdPassaporte());
+            ResponseEntity<CiclistaResponseDTO> ciclista = ciclistaService.getCiclistaById(idCiclista);
 
-            CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
-            response.setPassaporte(passaporte.getBody());
-
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ciclista.getBody());
         } catch (CustomException e) {
             throw new CustomException(e);
         }
@@ -105,7 +80,7 @@ public class CiclistaController {
     public ResponseEntity<Bicicleta> recuperarBicicleta(@PathVariable int idCiclista) throws CustomException {
         try{
             ciclistaService.ciclistaExists(idCiclista);
-            ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelByCiclistaId(idCiclista);
+            ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelAberto(idCiclista);
 
             if(!aluguel.hasBody()){
                 return ResponseEntity.ok().build();
@@ -120,9 +95,9 @@ public class CiclistaController {
     }
 
     @PostMapping("/{idCiclista}/ativar")
-    public ResponseEntity<Ciclista> ativarCadastro(@PathVariable int idCiclista) throws CustomException {
+    public ResponseEntity<CiclistaResponseDTO> ativarCadastro(@PathVariable int idCiclista) throws CustomException {
         try{
-            ResponseEntity<Ciclista> ciclista = ciclistaService.ativarCadastro(idCiclista);
+            ResponseEntity<CiclistaResponseDTO> ciclista = ciclistaService.ativarCadastro(idCiclista);
 
             return ciclista;
         } catch (CustomException e) {
@@ -130,14 +105,14 @@ public class CiclistaController {
         }
     }
 
-//    @PostMapping("/{idCiclista}/permiteAluguel")
-//    public ResponseEntity<Boolean> permiteAluguel(@PathVariable int idCiclista) throws CustomException {
-//        try{
-//            ResponseEntity<Ciclista> ciclista = ciclistaService.ativarCadastro(idCiclista);
-//
-//            return ciclista;
-//        } catch (CustomException e) {
-//            throw new CustomException(e);
-//        }
-//    }
+    @PostMapping("/{idCiclista}/permiteAluguel")
+    public ResponseEntity<Boolean> permiteAluguel(@PathVariable int idCiclista) throws CustomException {
+        try{
+            boolean hasAluguel = ciclistaService.hasAluguel(idCiclista);
+
+            return ResponseEntity.ok(!hasAluguel);
+        } catch (CustomException e) {
+            throw new CustomException(e);
+        }
+    }
 }

@@ -98,7 +98,7 @@ databaseChangeLog:
                   name:  cpf
                   type:  varchar(11)
                   constraints:
-                    nullable:  false
+                    nullable:  true
               - column:
                   name: nacionalidade
                   type: varchar(50)
@@ -108,7 +108,7 @@ databaseChangeLog:
                   name:  id_passaporte
                   type:  int
                   constraints:
-                    nullable:  false
+                    nullable:  true
               - column:
                   name:  id_cartao
                   type:  int
@@ -134,12 +134,6 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable:  false
-        - addForeignKeyConstraint:
-            baseTableName: Ciclista
-            baseColumnNames: id_passaporte
-            referencedTableName: Passaporte
-            referencedColumnNames: id
-            constraintName: fk_id_passaporte
         - addForeignKeyConstraint:
             baseTableName: Ciclista
             baseColumnNames: id_cartao

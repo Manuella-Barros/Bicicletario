@@ -1,5 +1,6 @@
 package com.trabalho.bicicletario.service;
 
+import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.model.integracoes.*;
@@ -9,36 +10,24 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
 
 @Service
 public class AluguelService {
     AluguelRepository aluguelRepository;
-    CiclistaService ciclistaService;
     Tranca tranca;
     Totem totem;
     Bicicleta bicicleta;
     Email email;
 
-    public AluguelService(AluguelRepository aluguelRepository, CiclistaService ciclistaService, Tranca tranca, Totem totem, Bicicleta bicicleta, Email email) {
+    public AluguelService(AluguelRepository aluguelRepository, Tranca tranca, Totem totem, Bicicleta bicicleta, Email email) {
         this.aluguelRepository = aluguelRepository;
-        this.ciclistaService = ciclistaService;
         this.tranca = tranca;
         this.totem = totem;
         this.bicicleta = bicicleta;
         this.email = email;
     }
 
-    public ResponseEntity<Aluguel> createAluguel(Aluguel aluguel) throws CustomException {
-        ResponseEntity<Ciclista> ciclista;
-
-        try {
-            ciclista = ciclistaService.getCiclistaById(aluguel.getCiclista());
-        } catch (CustomException e){
-            throw new CustomException(e);
-        }
-
+    public ResponseEntity<Aluguel> createAluguel(Aluguel aluguel, Ciclista ciclista) throws CustomException {
         try{
             if(!aluguel.checkIfValid()){
                 throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
@@ -64,19 +53,19 @@ public class AluguelService {
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.EM_USO.getDescricao(), createdAluguel.getBicicleta());
             tranca.alterarStatusTranca(StatusTrancaEnum.LIVRE.getDescricao(), createdAluguel.getTrancaInicio());
 
-            email.enviarEmail(ciclista.getBody().getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!");
+            email.enviarEmail(ciclista.getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!");
 
             return ResponseEntity.ok(createdAluguel);
         } catch (CustomException e) {
             if(e.getMensagem().equals(ErrorEnum.JA_TEM_ALUGUEL.getMensagem())){
-                email.enviarEmail(ciclista.getBody().getEmail(), "Aluguel negado", "O aluguel da bicicleta foi negado pois o usuário já possui um aluguel");
+                email.enviarEmail(ciclista.getEmail(), "Aluguel negado", "O aluguel da bicicleta foi negado pois o usuário já possui um aluguel");
             }
 
             throw new CustomException(e);
         }
     }
 
-    public ResponseEntity<Aluguel> getAluguelByCiclistaId(int idCiclista) throws CustomException {
+    public ResponseEntity<Aluguel> getAluguelAberto(int idCiclista) throws CustomException {
         if(idCiclista <= 0){
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
@@ -113,8 +102,6 @@ public class AluguelService {
 
             Aluguel createdAluguel = aluguelRepository.save(oldAluguel);
 
-            ResponseEntity<Ciclista> ciclista = ciclistaService.getCiclistaById(oldAluguel.getCiclista());
-            email.enviarEmail(ciclista.getBody().getEmail(), "Devolução realizada", "A devolução da bicicleta foi realizada com sucesso!");
 
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.REPARO_SOLICITADO.getDescricao(), oldAluguel.getBicicleta());
 
@@ -137,11 +124,7 @@ public class AluguelService {
             throw new CustomException(ErrorEnum.TRANCA_SEM_ESSA_BICICLETA);
         }
 
-        if(!ciclistaService.isCiclistaAtivo(idCiclista)){
-            throw new CustomException(ErrorEnum.CICLISTA_INATIVO);
-        }
-
-        if(this.getAluguelByCiclistaId(idCiclista).hasBody()){
+        if(this.getAluguelAberto(idCiclista).hasBody()){
             throw new CustomException(ErrorEnum.JA_TEM_ALUGUEL);
         }
 

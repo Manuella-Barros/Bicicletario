@@ -14,6 +14,8 @@ public enum ErrorEnum {
     TRANCA_INVALIDA("A tranca inserida é inválida", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
     BICICLETA_INVALIDA("A bicicleta inserida é inválida", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
     TRANCA_SEM_ESSA_BICICLETA("A tranca inserida não possui essa bicicleta", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    CARTAO_INVALIDO("O cartão inserido é inválido", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
+    ERRO_ENVIO_EMAIL("Erro ao enviar o email", "422", HttpStatus.UNPROCESSABLE_ENTITY ),
     NAO_DESTRANCOU("Não foi possível destrancar a tranca", "422", HttpStatus.UNPROCESSABLE_ENTITY );
 
     private String mensagem;

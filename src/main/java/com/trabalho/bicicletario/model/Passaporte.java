@@ -20,6 +20,16 @@ public class Passaporte {
     private LocalDate validade;
     private String pais;
 
+    public Passaporte(Passaporte passaporte) {
+        if (passaporte == null) {
+            return;
+        }
+
+        this.numero = passaporte.getNumero();
+        this.validade = passaporte.getValidade();
+        this.pais = passaporte.getPais();
+    }
+
     public boolean checkIfValid(){
         return this.numero != null && this.validade != null && this.pais != null;
     }

@@ -27,6 +27,13 @@ public class Cartao {
         this.validade = validade;
         this.cvv = cvv;
     }
+    public Cartao(Cartao cartao) {
+        this.id = cartao.getId();
+        this.nomeTitular = cartao.getNomeTitular();
+        this.numero = cartao.getNumero();
+        this.validade = cartao.getValidade();
+        this.cvv = cartao.getCvv();
+    }
 
     public boolean checkIfValid(){
         return this.nomeTitular != null && this.numero != null && this.validade != null && this.cvv != null;
