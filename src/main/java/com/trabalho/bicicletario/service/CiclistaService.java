@@ -190,7 +190,7 @@ public class CiclistaService {
         ResponseEntity<Cartao> createdCartao = cartaoService.createCartao(cartao);
         ciclista.setIdCartao(createdCartao.getBody().getId());
 
-        ciclistaRepository.insertWithId(
+        ciclistaRepository.changeCilistaId(
                 ciclista.getId(),
                 ciclista.getNome(),
                 ciclista.getNascimento(),

@@ -16,5 +16,5 @@ public interface CiclistaRepository extends CrudRepository<Ciclista, Integer> {
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO bancoaluguel.ciclista (id, nome, data_nascimento, cpf, nacionalidade, id_passaporte, id_cartao, email, status, url_foto_documento, senha) VALUES (:id, :nome, :data_nascimento, :cpf, :nacionalidade, :id_passaporte, :id_cartao, :email, :status, :url_foto_documento, :senha);", nativeQuery = true)
-    void insertWithId(int id, String nome, LocalDate data_nascimento, String cpf, String nacionalidade, int id_passaporte, int id_cartao, String email, String status, String url_foto_documento, String senha);
+    void changeCilistaId(int id, String nome, LocalDate data_nascimento, String cpf, String nacionalidade, int id_passaporte, int id_cartao, String email, String status, String url_foto_documento, String senha);
 }
