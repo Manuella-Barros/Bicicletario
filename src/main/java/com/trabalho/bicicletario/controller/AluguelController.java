@@ -17,7 +17,6 @@ public class AluguelController {
     AluguelService aluguelService;
     CiclistaService ciclistaService;
 
-
     public AluguelController(AluguelService aluguelService, CiclistaService ciclistaService) {
         this.aluguelService = aluguelService;
         this.ciclistaService = ciclistaService;

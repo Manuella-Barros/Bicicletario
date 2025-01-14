@@ -1,6 +1,7 @@
 package com.trabalho.bicicletario.model;
 
 import com.trabalho.bicicletario.dto.CiclistaDTO;
+import com.trabalho.bicicletario.dto.recuperarDados.RecuperarDadosCiclistaDTO;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -62,8 +63,19 @@ public class Ciclista {
         this.status = ciclistaResponseDTO.getStatus();
     }
 
+    public Ciclista(RecuperarDadosCiclistaDTO recuperarDadosCiclistaDTO) {
+        this.id = recuperarDadosCiclistaDTO.getIdentificador();
+        this.nome = recuperarDadosCiclistaDTO.getNome();
+        this.nascimento = recuperarDadosCiclistaDTO.getNascimento();
+        this.cpf = recuperarDadosCiclistaDTO.getCpf();
+        this.nacionalidade = recuperarDadosCiclistaDTO.getNacionalidade();
+        this.email = recuperarDadosCiclistaDTO.getEmail();
+        this.senha = recuperarDadosCiclistaDTO.getSenha();
+        this.status = recuperarDadosCiclistaDTO.getStatus();
+    }
+
     public boolean checkIfValid(){
-        return nascimento != null && nome != null && nacionalidade != null && email != null && urlFotoDocumento != null && senha != null;
+        return nascimento != null && nome != null && nacionalidade != null && email != null && senha != null;
     }
 
     public boolean checkIfBrasileiro(){

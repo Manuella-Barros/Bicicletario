@@ -1,11 +1,14 @@
 package com.trabalho.bicicletario.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.trabalho.bicicletario.util.converter.YearMonthStringConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 
 @Entity
 @RequiredArgsConstructor
@@ -17,10 +20,12 @@ public class Cartao {
     @Column(name = "nome_titular")
     private String nomeTitular;
     private String numero;
-    private LocalDate validade;
+
+    @JsonFormat(pattern = "yyyy-MM")
+    private YearMonth validade;
     private String cvv;
 
-    public Cartao(int id, String nomeTitular, String numero, LocalDate validade, String cvv) {
+    public Cartao(int id, String nomeTitular, String numero, YearMonth validade, String cvv) {
         this.id = id;
         this.nomeTitular = nomeTitular;
         this.numero = numero;

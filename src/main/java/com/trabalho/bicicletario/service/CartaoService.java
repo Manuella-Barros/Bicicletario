@@ -56,4 +56,8 @@ public class CartaoService {
 
         return ResponseEntity.ok(updateCartao);
     }
+
+    public void deleteAllCartoes() {
+        this.cartaoRepository.deleteAll();
+    }
 }

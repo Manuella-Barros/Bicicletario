@@ -1,4 +1,6 @@
 package com.trabalho.bicicletario.service;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
@@ -72,5 +74,33 @@ public class FuncionarioService {
         funcionarioRepository.deleteById(id);
 
         return ResponseEntity.ok().build();
+    }
+
+    public void deleteAllFuncionarios() {
+        funcionarioRepository.deleteAll();
+    }
+
+    public void recuperarDados() throws JsonProcessingException, CustomException {
+        this.deleteAllFuncionarios();
+
+        var jsons = "    [\n" +
+                "    {\n" +
+                "      \"matricula\": \"12345\",\n" +
+                "      \"senha\": \"123\",\n" +
+                "      \"confirmacaoSenha\": \"123\",\n" +
+                "      \"email\": \"employee@example.com\",\n" +
+                "      \"nome\": \"Beltrano\",\n" +
+                "      \"idade\": 25,\n" +
+                "      \"funcao\": \"Reparador\",\n" +
+                "      \"cpf\": \"99999999999\"\n" +
+                "    }\n" +
+                "  ]";
+
+        var objectMapper = new ObjectMapper();
+        Funcionario[] funcionarios = objectMapper.readValue(jsons, Funcionario[].class);
+
+        for (Funcionario funcionario : funcionarios) {
+            this.createFuncionario(funcionario);
+        }
     }
 }

@@ -27,7 +27,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: validade
-                  type: date
+                  type: varchar(7)
                   constraints:
                     nullable: false
               - column:
@@ -93,7 +93,7 @@ databaseChangeLog:
                   name:  data_nascimento
                   type:  Date
                   constraints:
-                    nullable:  false
+                    nullable:  true
               - column:
                   name:  cpf
                   type:  varchar(11)
@@ -128,7 +128,7 @@ databaseChangeLog:
                   name: url_foto_documento
                   type: varchar(50)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: senha
                   type: varchar(50)

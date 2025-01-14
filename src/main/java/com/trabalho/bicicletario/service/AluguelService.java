@@ -1,5 +1,7 @@
 package com.trabalho.bicicletario.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 @Service
 public class AluguelService {
     AluguelRepository aluguelRepository;
+    CiclistaService ciclistaService;
     Tranca tranca;
     Totem totem;
     Bicicleta bicicleta;
@@ -150,5 +153,51 @@ public class AluguelService {
 
         return (double) meiaHora * 5;
 
+    }
+
+    public void deleteAllAlugueis() {
+        aluguelRepository.deleteAll();
+    }
+
+    public void recuperarDados() throws JsonProcessingException, CustomException {
+        this.deleteAllAlugueis();
+
+        var jsons = "[\n" +
+                "    {\n" +
+                "        \"ciclista\": 3,\n" +
+                "        \"bicicleta\": 3,\n" +
+                "        \"trancaInicial\": 2,\n" +
+                "        \"status\": \"EM_ANDAMENTO\",\n" +
+                "        \"cobrancaInicial\": 1,\n" +
+                "        \"dataInicio\": \"[ DATA DO INSTANTE DA INSERÇÃO DOS DADOS ]\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"ciclista\": 4,\n" +
+                "        \"bicicleta\": 5,\n" +
+                "        \"trancaInicial\": 4,\n" +
+                "        \"status\": \"EM_ANDAMENTO\",\n" +
+                "        \"cobrancaInicial\": 2,\n" +
+                "        \"dataInicio\": \"[ 2 HORAS ANTES DO INSTANTE DA INSERÇÃO DOS DADOS ]\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "        \"ciclista\": 3,\n" +
+                "        \"bicicleta\": 1,\n" +
+                "        \"trancaInicial\": 1,\n" +
+                "        \"trancaFinal\": 2,\n" +
+                "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
+                "        \"cobrancaInicial\": 3,\n" +
+                "        \"dataInicio\": \"[ 2 HORAS ANTES DO INSTANTE DA INSERÇÃO DOS DADOS ]\",\n" +
+                "        \"dataFim\": \"[ INSTANTE DA INSERÇÃO DOS DADOS ]\"\n" +
+                "    }\n" +
+                "]";
+
+        var objectMapper = new ObjectMapper();
+        Aluguel[] alugueis = objectMapper.readValue(jsons, Aluguel[].class);
+
+        for (Aluguel aluguel : alugueis) {
+            ResponseEntity<CiclistaResponseDTO> ciclistaDTO = ciclistaService.getCiclistaById(aluguel.getCiclista());
+            Ciclista ciclista = new Ciclista(ciclistaDTO.getBody());
+            this.createAluguel(aluguel, ciclista);
+        }
     }
 }
