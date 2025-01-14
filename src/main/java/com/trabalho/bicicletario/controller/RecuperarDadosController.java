@@ -20,4 +20,9 @@ public class RecuperarDadosController {
     public void recuperarDados() throws IOException, CustomException {
         recuperarDadosService.recuperarDados();
     }
+
+    @GetMapping("/teste")
+    public String testa() {
+        return "FOI!!!";
+    }
 }
