@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class AluguelService {
@@ -165,6 +166,8 @@ public class AluguelService {
 
         // TODO - DE ONDE VEM E PRA ONDE VAI ESSE STATUS
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         var jsons = "[\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
@@ -172,7 +175,7 @@ public class AluguelService {
                 "        \"trancaInicio\": 2,\n" +
 //                "        \"status\": \"EM_ANDAMENTO\",\n" +
                 "        \"cobranca\": 1,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now() +
+                "        \"horaInicio\":" + LocalDateTime.now().format(formatter) +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 4,\n" +
@@ -180,7 +183,7 @@ public class AluguelService {
                 "        \"trancaInicio\": 4,\n" +
 //                "        \"status\": \"EM_ANDAMENTO\",\n" +
                 "        \"cobranca\": 2,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2) +
+                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2).format(formatter)  +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
@@ -189,8 +192,8 @@ public class AluguelService {
                 "        \"trancaFim\": 2,\n" +
 //                "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
                 "        \"cobranca\": 3,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2) +
-                "        \"horaFim\":" + LocalDateTime.now() +
+                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2).format(formatter)  +
+                "        \"horaFim\":" + LocalDateTime.now().format(formatter)  +
                 "    }\n" +
                 "]";
 
