@@ -1,0 +1,66 @@
+[
+  {
+    "identificador": 1,
+    "statusConfirmacaoConta": "CONFIRMADO",
+    "nome": "Fulano Beltrano",
+    "nascimento": "2021-05-02",
+    "cpf": "78804034009",
+    "nacionalidade": "Brasileiro",
+    "email": "user@example.com",
+    "senha": "ABC123",
+    "meioDePagamento": {
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
+    }
+  },
+  {
+    "identificador": 2,
+    "statusConfirmacaoConta": "AGUARDANDO_CONFIRMACAO",
+    "nome": "Fulano Beltrano",
+    "nascimento": "2021-05-02",
+    "cpf": "43943488039",
+    "nacionalidade": "Brasileiro",
+    "email": "user2@example.com",
+    "senha": "ABC123",
+    "meioDePagamento": {
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
+    }
+  },
+  {
+    "identificador": 3,
+    "statusConfirmacaoConta": "CONFIRMADO",
+    "nome": "Fulano Beltrano",
+    "nascimento": "2021-05-02",
+    "cpf": "10243164084",
+    "nacionalidade": "Brasileiro",
+    "email": "user3@example.com",
+    "senha": "ABC123",
+    "meioDePagamento": {
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
+    }
+  },
+  {
+    "identificador": 4,
+    "statusConfirmacaoConta": "CONFIRMADO",
+    "nome": "Fulano Beltrano",
+    "nascimento": "2021-05-02",
+    "cpf": "30880150017",
+    "nacionalidade": "Brasileiro",
+    "email": "user4@example.com",
+    "senha": "ABC123",
+    "meioDePagamento": {
+      "nomeTitular": "Fulano Beltrano",
+      "numero": "4012001037141112",
+      "validade": "2022-12",
+      "cvv": "132"
+    }
+  }
+]

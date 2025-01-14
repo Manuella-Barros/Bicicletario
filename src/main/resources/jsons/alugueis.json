@@ -1,0 +1,28 @@
+[
+  {
+    "ciclista": 3,
+    "bicicleta": 3,
+    "trancaInicial": 2,
+    "status": "EM_ANDAMENTO",
+    "cobrancaInicial": 1,
+    "dataInicio": "[ DATA DO INSTANTE DA INSERÇÃO DOS DADOS ]"
+  },
+  {
+    "ciclista": 4,
+    "bicicleta": 5,
+    "trancaInicial": 4,
+    "status": "EM_ANDAMENTO",
+    "cobrancaInicial": 2,
+    "dataInicio": "[ 2 HORAS ANTES DO INSTANTE DA INSERÇÃO DOS DADOS ]"
+  },
+  {
+    "ciclista": 3,
+    "bicicleta": 1,
+    "trancaInicial": 1,
+    "trancaFinal": 2,
+    "status": "FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE",
+    "cobrancaInicial": 3,
+    "dataInicio": "[ 2 HORAS ANTES DO INSTANTE DA INSERÇÃO DOS DADOS ]",
+    "dataFim": "[ INSTANTE DA INSERÇÃO DOS DADOS ]"
+  }
+]

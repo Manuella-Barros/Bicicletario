@@ -7,7 +7,12 @@ import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.repository.FuncionarioRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 @Service
@@ -80,24 +85,14 @@ public class FuncionarioService {
         funcionarioRepository.deleteAll();
     }
 
-    public void recuperarDados() throws JsonProcessingException, CustomException {
+    public void recuperarDados() throws IOException, CustomException {
         this.deleteAllFuncionarios();
 
-        var jsons = "    [\n" +
-                "    {\n" +
-                "      \"matricula\": \"12345\",\n" +
-                "      \"senha\": \"123\",\n" +
-                "      \"confirmacaoSenha\": \"123\",\n" +
-                "      \"email\": \"employee@example.com\",\n" +
-                "      \"nome\": \"Beltrano\",\n" +
-                "      \"idade\": 25,\n" +
-                "      \"funcao\": \"Reparador\",\n" +
-                "      \"cpf\": \"99999999999\"\n" +
-                "    }\n" +
-                "  ]";
+        Path caminhoJson = ResourceUtils.getFile("classpath:jsons/funcionarios.json").toPath();
+        String json = Files.readString(caminhoJson);
 
         var objectMapper = new ObjectMapper();
-        Funcionario[] funcionarios = objectMapper.readValue(jsons, Funcionario[].class);
+        Funcionario[] funcionarios = objectMapper.readValue(json, Funcionario[].class);
 
         for (Funcionario funcionario : funcionarios) {
             this.createFuncionario(funcionario);

@@ -2,6 +2,7 @@ package com.trabalho.bicicletario.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
@@ -49,7 +50,7 @@ public class AluguelService {
             aluguel.setHoraInicio(dataAtual);
             aluguel.setHoraFim(dataAtual);
             aluguel.setCobranca(10.00);
-            aluguel.setBicicleta(1);
+            aluguel.setBicicleta(1); // TODO - SERA Q TEM Q BUSCAR A BICICLETA AQUI
 
             Aluguel createdAluguel = aluguelRepository.save(aluguel);
 
@@ -162,36 +163,39 @@ public class AluguelService {
     public void recuperarDados() throws JsonProcessingException, CustomException {
         this.deleteAllAlugueis();
 
+        // TODO - DE ONDE VEM E PRA ONDE VAI ESSE STATUS
+
         var jsons = "[\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
                 "        \"bicicleta\": 3,\n" +
-                "        \"trancaInicial\": 2,\n" +
-                "        \"status\": \"EM_ANDAMENTO\",\n" +
-                "        \"cobrancaInicial\": 1,\n" +
-                "        \"dataInicio\": \"[ DATA DO INSTANTE DA INSERÇÃO DOS DADOS ]\"\n" +
+                "        \"trancaInicio\": 2,\n" +
+//                "        \"status\": \"EM_ANDAMENTO\",\n" +
+                "        \"cobranca\": 1,\n" +
+                "        \"horaInicio\":" + LocalDateTime.now() +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 4,\n" +
                 "        \"bicicleta\": 5,\n" +
-                "        \"trancaInicial\": 4,\n" +
-                "        \"status\": \"EM_ANDAMENTO\",\n" +
-                "        \"cobrancaInicial\": 2,\n" +
-                "        \"dataInicio\": \"[ 2 HORAS ANTES DO INSTANTE DA INSERÇÃO DOS DADOS ]\"\n" +
+                "        \"trancaInicio\": 4,\n" +
+//                "        \"status\": \"EM_ANDAMENTO\",\n" +
+                "        \"cobranca\": 2,\n" +
+                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2) +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
                 "        \"bicicleta\": 1,\n" +
-                "        \"trancaInicial\": 1,\n" +
-                "        \"trancaFinal\": 2,\n" +
-                "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
-                "        \"cobrancaInicial\": 3,\n" +
-                "        \"dataInicio\": \"[ 2 HORAS ANTES DO INSTANTE DA INSERÇÃO DOS DADOS ]\",\n" +
-                "        \"dataFim\": \"[ INSTANTE DA INSERÇÃO DOS DADOS ]\"\n" +
+                "        \"trancaInicio\": 1,\n" +
+                "        \"trancaFim\": 2,\n" +
+//                "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
+                "        \"cobranca\": 3,\n" +
+                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2) +
+                "        \"horaFim\":" + LocalDateTime.now() +
                 "    }\n" +
                 "]";
 
         var objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         Aluguel[] alugueis = objectMapper.readValue(jsons, Aluguel[].class);
 
         for (Aluguel aluguel : alugueis) {

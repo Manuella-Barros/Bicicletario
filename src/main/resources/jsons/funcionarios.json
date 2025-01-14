@@ -1,0 +1,12 @@
+[
+  {
+    "matricula": "12345",
+    "senha": "123",
+    "confirmacaoSenha": "123",
+    "email": "employee@example.com",
+    "nome": "Beltrano",
+    "idade": 25,
+    "funcao": "Reparador",
+    "cpf": "99999999999"
+  }
+]

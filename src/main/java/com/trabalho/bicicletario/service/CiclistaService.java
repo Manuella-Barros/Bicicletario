@@ -1,6 +1,5 @@
 package com.trabalho.bicicletario.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.trabalho.bicicletario.dto.recuperarDados.RecuperarDadosCiclistaDTO;
@@ -11,11 +10,12 @@ import com.trabalho.bicicletario.model.integracoes.Cobranca;
 import com.trabalho.bicicletario.model.integracoes.Email;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.ResourceUtils;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 
 
@@ -190,7 +190,7 @@ public class CiclistaService {
         ResponseEntity<Cartao> createdCartao = cartaoService.createCartao(cartao);
         ciclista.setIdCartao(createdCartao.getBody().getId());
 
-        ciclistaRepository.changeCilistaId(
+        ciclistaRepository.changeCiclistaId(
                 ciclista.getId(),
                 ciclista.getNome(),
                 ciclista.getNascimento(),
@@ -206,83 +206,20 @@ public class CiclistaService {
 
     }
 
-    public void recuperarDados() throws JsonProcessingException, CustomException {
+    public void recuperarDados() throws IOException, CustomException {
         this.deleteAllCiclistas();
         this.cartaoService.deleteAllCartoes();
 
-        var jsons = "[\n" +
-                "    {\n" +
-                "        \"identificador\": 1,\n" +
-                "        \"statusConfirmacaoConta\": \"CONFIRMADO\",\n" +
-                "        \"nome\": \"Fulano Beltrano\",\n" +
-                "        \"nascimento\": \"2021-05-02\",\n" +
-                "        \"cpf\": \"78804034009\",\n" +
-                "        \"nacionalidade\": \"Brasileiro\",\n" +
-                "        \"email\": \"user@example.com\",\n" +
-                "        \"senha\": \"ABC123\",\n" +
-                "        \"meioDePagamento\": {\n" +
-                "            \"nomeTitular\": \"Fulano Beltrano\",\n" +
-                "            \"numero\": \"4012001037141112\",\n" +
-                "            \"validade\": \"2022-12\",\n" +
-                "            \"cvv\": \"132\"\n" +
-                "        }\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"identificador\": 2,\n" +
-                "      \"statusConfirmacaoConta\": \"AGUARDANDO_CONFIRMACAO\",\n" +
-                "      \"nome\": \"Fulano Beltrano\",\n" +
-                "      \"nascimento\": \"2021-05-02\",\n" +
-                "      \"cpf\": \"43943488039\",\n" +
-                "      \"nacionalidade\": \"Brasileiro\",\n" +
-                "      \"email\": \"user2@example.com\",\n" +
-                "      \"senha\": \"ABC123\",\n" +
-                "      \"meioDePagamento\": {\n" +
-                "        \"nomeTitular\": \"Fulano Beltrano\",\n" +
-                "        \"numero\": \"4012001037141112\",\n" +
-                "        \"validade\": \"2022-12\",\n" +
-                "        \"cvv\": \"132\"\n" +
-                "      }\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"identificador\": 3,\n" +
-                "      \"statusConfirmacaoConta\": \"CONFIRMADO\",\n" +
-                "      \"nome\": \"Fulano Beltrano\",\n" +
-                "      \"nascimento\": \"2021-05-02\",\n" +
-                "      \"cpf\": \"10243164084\",\n" +
-                "      \"nacionalidade\": \"Brasileiro\",\n" +
-                "      \"email\": \"user3@example.com\",\n" +
-                "      \"senha\": \"ABC123\",\n" +
-                "      \"meioDePagamento\": {\n" +
-                "        \"nomeTitular\": \"Fulano Beltrano\",\n" +
-                "        \"numero\": \"4012001037141112\",\n" +
-                "        \"validade\": \"2022-12\",\n" +
-                "        \"cvv\": \"132\"\n" +
-                "      }\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"identificador\": 4,\n" +
-                "      \"statusConfirmacaoConta\": \"CONFIRMADO\",\n" +
-                "      \"nome\": \"Fulano Beltrano\",\n" +
-                "      \"nascimento\": \"2021-05-02\",\n" +
-                "      \"cpf\": \"30880150017\",\n" +
-                "      \"nacionalidade\": \"Brasileiro\",\n" +
-                "      \"email\": \"user4@example.com\",\n" +
-                "      \"senha\": \"ABC123\",\n" +
-                "      \"meioDePagamento\": {\n" +
-                "        \"nomeTitular\": \"Fulano Beltrano\",\n" +
-                "        \"numero\": \"4012001037141112\",\n" +
-                "        \"validade\": \"2022-12\",\n" +
-                "        \"cvv\": \"132\"\n" +
-                "      }\n" +
-                "    }\n" +
-                "  ]";
+        Path caminhoJson = ResourceUtils.getFile("classpath:jsons/ciclistas.json").toPath();
+        String json = Files.readString(caminhoJson);
 
         var objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        RecuperarDadosCiclistaDTO[] ciclistas = objectMapper.readValue(jsons, RecuperarDadosCiclistaDTO[].class);
+        RecuperarDadosCiclistaDTO[] ciclistas = objectMapper.readValue(json, RecuperarDadosCiclistaDTO[].class);
 
         for (RecuperarDadosCiclistaDTO ciclista : ciclistas) {
+            System.out.println(ciclista.getNome());
             Ciclista ciclistaInfo = new Ciclista(ciclista);
             Cartao cartao = new Cartao(ciclista.getMeioDePagamento());
             this.createMockCiclista(ciclistaInfo, cartao);
