@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "funcionario")
+@Table(name = "Funcionario")
 @RequiredArgsConstructor
 @Setter @Getter
 public class Funcionario {

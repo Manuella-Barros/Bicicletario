@@ -6,7 +6,7 @@ databaseChangeLog:
       comment: adição da tabela de cartao
       changes:
         - createTable:
-            tableName: Cartao
+            tableName: cartao
             columns:
               - column:
                   name: id
@@ -43,7 +43,7 @@ databaseChangeLog:
         comment: adição da tabela de passaporte
         changes:
           - createTable:
-              tableName: Passaporte
+              tableName: passaporte
               columns:
                 - column:
                     name: id
@@ -75,7 +75,7 @@ databaseChangeLog:
       comment: adição da tabela de ciclista
       changes:
         - createTable:
-            tableName:  Ciclista
+            tableName:  ciclista
             columns:
               - column:
                   name:  id
@@ -135,9 +135,9 @@ databaseChangeLog:
                   constraints:
                     nullable:  false
         - addForeignKeyConstraint:
-            baseTableName: Ciclista
+            baseTableName: ciclista
             baseColumnNames: id_cartao
-            referencedTableName: Cartao
+            referencedTableName: cartao
             referencedColumnNames: id
             constraintName: fk_id_cartao
 
@@ -148,7 +148,7 @@ databaseChangeLog:
       comment: adição da tabela de funcionario
       changes:
         - createTable:
-            tableName:  Funcionario
+            tableName: funcionario
             columns:
               - column:
                   name:  id
@@ -207,7 +207,7 @@ databaseChangeLog:
       comment: adição da tabela de aluguel
       changes:
         - createTable:
-            tableName:  Aluguel
+            tableName:  aluguel
             columns:
               - column:
                   name:  id
