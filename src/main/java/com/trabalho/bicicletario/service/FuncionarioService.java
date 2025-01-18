@@ -5,12 +5,15 @@ import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.repository.FuncionarioRepository;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -86,12 +89,16 @@ public class FuncionarioService {
     }
 
     public void recuperarDados() throws IOException, CustomException {
+        // Remove todos os funcionários existentes
         this.deleteAllFuncionarios();
 
-        Path caminhoJson = ResourceUtils.getFile("classpath:jsons/funcionarios.json").toPath();
-        String json = Files.readString(caminhoJson);
+        ClassPathResource resource = new ClassPathResource("jsons/funcionarios.json");
+        String json;
+        try (InputStream inputStream = resource.getInputStream()) {
+            json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
 
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         Funcionario[] funcionarios = objectMapper.readValue(json, Funcionario[].class);
 
         for (Funcionario funcionario : funcionarios) {

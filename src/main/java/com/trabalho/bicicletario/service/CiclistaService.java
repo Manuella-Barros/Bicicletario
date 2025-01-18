@@ -13,11 +13,14 @@ import com.trabalho.bicicletario.repository.implementations.CiclistaRepositoryIm
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -205,10 +208,13 @@ public class CiclistaService {
         this.deleteAllCiclistas();
         this.cartaoService.deleteAllCartoes();
 
-        Path caminhoJson = ResourceUtils.getFile("classpath:jsons/ciclistas.json").toPath();
-        String json = Files.readString(caminhoJson);
+        ClassPathResource resource = new ClassPathResource("jsons/ciclistas.json");
+        String json;
+        try (InputStream inputStream = resource.getInputStream()) {
+            json = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        }
 
-        var objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
         RecuperarDadosCiclistaDTO[] ciclistas = objectMapper.readValue(json, RecuperarDadosCiclistaDTO[].class);
