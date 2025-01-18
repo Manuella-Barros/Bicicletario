@@ -89,7 +89,6 @@ public class FuncionarioService {
     }
 
     public void recuperarDados() throws IOException, CustomException {
-        // Remove todos os funcionários existentes
         this.deleteAllFuncionarios();
 
         ClassPathResource resource = new ClassPathResource("jsons/funcionarios.json");

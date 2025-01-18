@@ -16,13 +16,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Optional;
 
 @Service
@@ -220,7 +216,6 @@ public class CiclistaService {
         RecuperarDadosCiclistaDTO[] ciclistas = objectMapper.readValue(json, RecuperarDadosCiclistaDTO[].class);
 
         for (RecuperarDadosCiclistaDTO ciclista : ciclistas) {
-            System.out.println(ciclista.getNome());
             Ciclista ciclistaInfo = new Ciclista(ciclista);
             Cartao cartao = new Cartao(ciclista.getMeioDePagamento());
             this.createMockCiclista(ciclistaInfo, cartao);

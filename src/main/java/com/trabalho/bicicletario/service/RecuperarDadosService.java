@@ -1,11 +1,13 @@
 package com.trabalho.bicicletario.service;
 
+import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
+import com.trabalho.bicicletario.model.Aluguel;
+import com.trabalho.bicicletario.model.Ciclista;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class RecuperarDadosService {
@@ -20,8 +22,14 @@ public class RecuperarDadosService {
     }
 
     public void recuperarDados() throws IOException, CustomException {
-        ciclistaService.recuperarDados(); // feito
-        funcionarioService.recuperarDados(); // feito
-//        aluguelService.recuperarDados();
+        ciclistaService.recuperarDados();
+        funcionarioService.recuperarDados();
+        Aluguel[] alugueis = aluguelService.recuperarDados();
+
+        for (Aluguel aluguel : alugueis) {
+            ResponseEntity<CiclistaResponseDTO> ciclistaDTO = ciclistaService.getCiclistaById(aluguel.getCiclista());
+            Ciclista ciclista = new Ciclista(ciclistaDTO.getBody());
+            aluguelService.createAluguel(aluguel, ciclista);
+        }
     }
 }

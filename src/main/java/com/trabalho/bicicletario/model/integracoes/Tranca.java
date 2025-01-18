@@ -23,8 +23,9 @@ public class Tranca {
     }
 
     public Bicicleta getBicicletaByIdTranca(int idTranca){
-        this.idTranca = idTranca;
-        return new Bicicleta();
+        Bicicleta bicicleta = new Bicicleta();
+        bicicleta.setId(idTranca);
+        return bicicleta;
     }
 
     public Bicicleta alterarStatusTranca(String status, int idTranca){

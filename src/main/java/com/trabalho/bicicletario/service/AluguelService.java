@@ -3,22 +3,18 @@ package com.trabalho.bicicletario.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.model.integracoes.*;
 import com.trabalho.bicicletario.repository.AluguelRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class AluguelService {
     AluguelRepository aluguelRepository;
-    CiclistaService ciclistaService;
     Tranca tranca;
     Totem totem;
     Bicicleta bicicleta;
@@ -48,10 +44,18 @@ public class AluguelService {
             }
 
             LocalDateTime dataAtual = LocalDateTime.now();
-            aluguel.setHoraInicio(dataAtual);
-            aluguel.setHoraFim(dataAtual);
-            aluguel.setCobranca(10.00);
-            aluguel.setBicicleta(1); // TODO - SERA Q TEM Q BUSCAR A BICICLETA AQUI
+
+            if(aluguel.getHoraInicio() == null)
+                aluguel.setHoraInicio(dataAtual);
+
+            if(aluguel.getHoraFim() == null)
+                aluguel.setHoraFim(dataAtual);
+
+            if(aluguel.getCobranca() == 0)
+                aluguel.setCobranca(10.00);
+
+            if(aluguel.getBicicleta() == 0)
+                aluguel.setBicicleta(1); // TODO - SERA Q TEM Q BUSCAR A BICICLETA AQUI
 
             Aluguel createdAluguel = aluguelRepository.save(aluguel);
 
@@ -125,11 +129,11 @@ public class AluguelService {
             throw new CustomException(ErrorEnum.NAO_DESTRANCOU);
         }
 
-        if(tranca.getBicicletaByIdTranca(idTranca) == null || tranca.getBicicletaByIdTranca(idTranca).getId() != idBicicleta){
+        if(tranca.getBicicletaByIdTranca(idTranca) == null || tranca.getBicicletaByIdTranca(idBicicleta).getId() != idBicicleta){
             throw new CustomException(ErrorEnum.TRANCA_SEM_ESSA_BICICLETA);
         }
 
-        if(this.getAluguelAberto(idCiclista).hasBody()){
+        if(this.getAluguelAberto(idCiclista).hasBody() && this.getAluguelAberto(idCiclista).getBody().getHoraFim() == null ){
             throw new CustomException(ErrorEnum.JA_TEM_ALUGUEL);
         }
 
@@ -161,39 +165,37 @@ public class AluguelService {
         aluguelRepository.deleteAll();
     }
 
-    public void recuperarDados() throws JsonProcessingException, CustomException {
+    public Aluguel[] recuperarDados() throws JsonProcessingException, CustomException {
         this.deleteAllAlugueis();
 
         // TODO - DE ONDE VEM E PRA ONDE VAI ESSE STATUS
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        var jsons = "[\n" +
+        var jsons = " [\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
                 "        \"bicicleta\": 3,\n" +
                 "        \"trancaInicio\": 2,\n" +
-//                "        \"status\": \"EM_ANDAMENTO\",\n" +
+//      "        \"status\": \"EM_ANDAMENTO\",\n" +
                 "        \"cobranca\": 1,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now() +
+                "        \"horaInicio\": \"" + LocalDateTime.now() + "\"\n" +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 4,\n" +
                 "        \"bicicleta\": 5,\n" +
                 "        \"trancaInicio\": 4,\n" +
-//                "        \"status\": \"EM_ANDAMENTO\",\n" +
+//      "        \"status\": \"EM_ANDAMENTO\",\n" +
                 "        \"cobranca\": 2,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2)  +
+                "        \"horaInicio\": \"" + LocalDateTime.now().minusHours(2) + "\"\n" +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
                 "        \"bicicleta\": 1,\n" +
                 "        \"trancaInicio\": 1,\n" +
                 "        \"trancaFim\": 2,\n" +
-//                "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
+//      "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
                 "        \"cobranca\": 3,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2)  +
-                "        \"horaFim\":" + LocalDateTime.now()  +
+                "        \"horaInicio\": \"" + LocalDateTime.now().minusHours(2) + "\",\n" + // Adicionada a vírgula aqui
+                "        \"horaFim\": \"" + LocalDateTime.now() + "\"\n" +
                 "    }\n" +
                 "]";
 
@@ -201,10 +203,6 @@ public class AluguelService {
         objectMapper.registerModule(new JavaTimeModule());
         Aluguel[] alugueis = objectMapper.readValue(jsons, Aluguel[].class);
 
-        for (Aluguel aluguel : alugueis) {
-            ResponseEntity<CiclistaResponseDTO> ciclistaDTO = ciclistaService.getCiclistaById(aluguel.getCiclista());
-            Ciclista ciclista = new Ciclista(ciclistaDTO.getBody());
-            this.createAluguel(aluguel, ciclista);
-        }
+        return alugueis;
     }
 }
