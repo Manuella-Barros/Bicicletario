@@ -9,15 +9,18 @@ import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.model.integracoes.Cobranca;
 import com.trabalho.bicicletario.model.integracoes.Email;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
+import com.trabalho.bicicletario.repository.implementations.CiclistaRepositoryImpl;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-
 
 @Service
 public class CiclistaService {
@@ -27,8 +30,9 @@ public class CiclistaService {
     AluguelService aluguelService;
     Cobranca cobranca;
     Email email;
-    private EntityManager entityManager;
 
+    @PersistenceContext
+    EntityManager entityManager;
 
     public CiclistaService(CiclistaRepository ciclistaRepository, Email email, Cobranca cobranca, PassaporteService passaporteService, CartaoService cartaoService, AluguelService aluguelService) {
         this.ciclistaRepository = ciclistaRepository;
@@ -60,7 +64,7 @@ public class CiclistaService {
 
         ResponseEntity<Cartao> createdCartao = cartaoService.createCartao(cartao);
 
-//        ciclista.setStatus(StatusCiclistaEnum.INATIVO.getDescricao());
+        ciclista.setStatus(StatusCiclistaEnum.INATIVO.getDescricao());
         ciclista.setIdCartao(createdCartao.getBody().getId());
 
         Ciclista createdCiclista = ciclistaRepository.save( ciclista );
@@ -183,29 +187,20 @@ public class CiclistaService {
 
     public void deleteAllCiclistas() {
         ciclistaRepository.deleteAll();
-
     }
 
+    @Transactional
     public void createMockCiclista(Ciclista ciclista, Cartao cartao) throws CustomException {
         ResponseEntity<Cartao> createdCartao = cartaoService.createCartao(cartao);
         ciclista.setIdCartao(createdCartao.getBody().getId());
 
-        ciclistaRepository.changeCiclistaId(
-                ciclista.getId(),
-                ciclista.getNome(),
-                ciclista.getNascimento(),
-                ciclista.getCpf(),
-                ciclista.getNacionalidade(),
-                ciclista.getIdPassaporte(),
-                ciclista.getIdCartao(),
-                ciclista.getEmail(),
-                ciclista.getStatus(),
-                ciclista.getUrlFotoDocumento(),
-                ciclista.getSenha()
-        );
+        CiclistaRepositoryImpl ciclistaRepositoryImpl = new CiclistaRepositoryImpl(entityManager);
+
+        ciclistaRepositoryImpl.save(ciclista);
 
     }
 
+    @Transactional
     public void recuperarDados() throws IOException, CustomException {
         this.deleteAllCiclistas();
         this.cartaoService.deleteAllCartoes();

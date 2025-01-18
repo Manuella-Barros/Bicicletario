@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 @Setter @Getter
 public class Ciclista {
+    @Column(name = "id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
 

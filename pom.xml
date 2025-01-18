@@ -18,6 +18,14 @@
 	</properties>
 
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/io.github.cdimascio/java-dotenv -->
+		<dependency>
+			<groupId>io.github.cdimascio</groupId>
+			<artifactId>dotenv-java</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
+
 		<!-- Dependências para Jackson -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>

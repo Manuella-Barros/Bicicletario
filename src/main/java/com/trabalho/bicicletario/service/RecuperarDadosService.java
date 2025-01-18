@@ -18,8 +18,8 @@ public class RecuperarDadosService {
     }
 
     public void recuperarDados() throws IOException, CustomException {
-//        ciclistaService.recuperarDados(); // feito
-//        funcionarioService.recuperarDados(); // feito
-        aluguelService.recuperarDados();
+        ciclistaService.recuperarDados(); // feito
+        funcionarioService.recuperarDados(); // feito
+//        aluguelService.recuperarDados();
     }
 }
