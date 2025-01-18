@@ -175,7 +175,7 @@ public class AluguelService {
                 "        \"trancaInicio\": 2,\n" +
 //                "        \"status\": \"EM_ANDAMENTO\",\n" +
                 "        \"cobranca\": 1,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().format(formatter) +
+                "        \"horaInicio\":" + LocalDateTime.now() +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 4,\n" +
@@ -183,7 +183,7 @@ public class AluguelService {
                 "        \"trancaInicio\": 4,\n" +
 //                "        \"status\": \"EM_ANDAMENTO\",\n" +
                 "        \"cobranca\": 2,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2).format(formatter)  +
+                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2)  +
                 "    },\n" +
                 "    {\n" +
                 "        \"ciclista\": 3,\n" +
@@ -192,8 +192,8 @@ public class AluguelService {
                 "        \"trancaFim\": 2,\n" +
 //                "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
                 "        \"cobranca\": 3,\n" +
-                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2).format(formatter)  +
-                "        \"horaFim\":" + LocalDateTime.now().format(formatter)  +
+                "        \"horaInicio\":" + LocalDateTime.now().minusHours(2)  +
+                "        \"horaFim\":" + LocalDateTime.now()  +
                 "    }\n" +
                 "]";
 
