@@ -1,6 +1,6 @@
 package com.trabalho.bicicletario.exception;
 
-import com.trabalho.bicicletario.model.ErrorEnum;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import org.springframework.http.HttpStatus;
 
 public class CustomException extends Exception {

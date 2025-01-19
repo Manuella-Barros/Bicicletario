@@ -1,4 +1,4 @@
-package com.trabalho.bicicletario.model;
+package com.trabalho.bicicletario.model.Enum;
 
 import org.springframework.http.HttpStatus;
 

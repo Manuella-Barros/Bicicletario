@@ -6,6 +6,8 @@ import com.trabalho.bicicletario.dto.recuperarDados.RecuperarDadosCiclistaDTO;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
+import com.trabalho.bicicletario.model.Enum.StatusCiclistaEnum;
 import com.trabalho.bicicletario.model.integracoes.Cobranca;
 import com.trabalho.bicicletario.model.integracoes.Email;
 import com.trabalho.bicicletario.repository.CiclistaRepository;

@@ -1,4 +1,4 @@
-package com.trabalho.bicicletario.model;
+package com.trabalho.bicicletario.model.Enum;
 
 public enum StatusCiclistaEnum {
     ATIVO("ATIVO"),

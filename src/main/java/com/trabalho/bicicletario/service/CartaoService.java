@@ -2,7 +2,7 @@ package com.trabalho.bicicletario.service;
 
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Cartao;
-import com.trabalho.bicicletario.model.ErrorEnum;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.repository.CartaoRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

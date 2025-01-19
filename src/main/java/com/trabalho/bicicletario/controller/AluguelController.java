@@ -5,6 +5,7 @@ import com.trabalho.bicicletario.dto.RealizarDevolucaoDTO;
 import com.trabalho.bicicletario.dto.response.CiclistaResponseDTO;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.integracoes.Email;
 import com.trabalho.bicicletario.service.AluguelService;
 import com.trabalho.bicicletario.service.CiclistaService;

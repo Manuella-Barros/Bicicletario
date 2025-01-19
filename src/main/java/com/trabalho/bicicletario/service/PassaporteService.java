@@ -1,7 +1,7 @@
 package com.trabalho.bicicletario.service;
 
 import com.trabalho.bicicletario.exception.CustomException;
-import com.trabalho.bicicletario.model.ErrorEnum;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Passaporte;
 import com.trabalho.bicicletario.repository.PassaporteRepository;
 import org.springframework.http.ResponseEntity;

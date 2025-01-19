@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.integracoes.*;
 import com.trabalho.bicicletario.repository.AluguelRepository;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class AluguelService {
                 aluguel.setCobranca(10.00);
 
             if(aluguel.getBicicleta() == 0)
-                aluguel.setBicicleta(1); // TODO - SERA Q TEM Q BUSCAR A BICICLETA AQUI
+                aluguel.setBicicleta(1); // TODO - /tranca/{idTranca}/bicicleta - Obter bicicleta na tranca
 
             Aluguel createdAluguel = aluguelRepository.save(aluguel);
 

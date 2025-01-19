@@ -1,7 +1,7 @@
 package com.trabalho.bicicletario.exception;
 
 import com.trabalho.bicicletario.model.Error;
-import com.trabalho.bicicletario.model.ErrorEnum;
+import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
