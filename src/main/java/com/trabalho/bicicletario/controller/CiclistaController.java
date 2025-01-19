@@ -115,4 +115,18 @@ public class CiclistaController {
             throw new CustomException(e);
         }
     }
+
+    @GetMapping("/getAll") // TODO - APAGAR
+    public ResponseEntity<Iterable<Ciclista>> pegaTodos() {
+        Iterable<Ciclista> alugueis = ciclistaService.pegaTodos();
+
+        return ResponseEntity.ok(alugueis);
+    }
+
+    @DeleteMapping("/deleteAll") // TODO - APAGAR
+    public ResponseEntity deletaTodos() {
+        ciclistaService.deletaTodos();
+
+        return ResponseEntity.ok().build();
+    }
 }

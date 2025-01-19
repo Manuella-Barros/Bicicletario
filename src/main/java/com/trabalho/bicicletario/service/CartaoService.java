@@ -2,6 +2,7 @@ package com.trabalho.bicicletario.service;
 
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Cartao;
+import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.repository.CartaoRepository;
 import org.springframework.http.ResponseEntity;
@@ -59,5 +60,13 @@ public class CartaoService {
 
     public void deleteAllCartoes() {
         this.cartaoRepository.deleteAll();
+    }
+
+    public Iterable<Cartao> pegaTodos(){
+        return cartaoRepository.findAll();
+    }
+
+    public void deletaTodos(){
+        cartaoRepository.deleteAll();
     }
 }

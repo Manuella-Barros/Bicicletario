@@ -1,6 +1,7 @@
 package com.trabalho.bicicletario.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trabalho.bicicletario.exception.CustomException;
+import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.repository.FuncionarioRepository;
@@ -98,5 +99,13 @@ public class FuncionarioService {
         for (Funcionario funcionario : funcionarios) {
             this.createFuncionario(funcionario);
         }
+    }
+
+    public Iterable<Funcionario> pegaTodos(){
+        return funcionarioRepository.findAll();
+    }
+
+    public void deletaTodos(){
+        funcionarioRepository.deleteAll();
     }
 }

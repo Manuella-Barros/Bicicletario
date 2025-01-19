@@ -1,6 +1,7 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.exception.CustomException;
+import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.service.FuncionarioService;
 import org.springframework.http.HttpStatus;
@@ -69,5 +70,19 @@ public class FuncionarioController {
         } catch (CustomException e) {
             throw new CustomException(e);
         }
+    }
+
+    @GetMapping("/getAll") // TODO - APAGAR
+    public ResponseEntity<Iterable<Funcionario>> pegaTodos() {
+        Iterable<Funcionario> alugueis = funcionarioService.pegaTodos();
+
+        return ResponseEntity.ok(alugueis);
+    }
+
+    @DeleteMapping("/deleteAll") // TODO - APAGAR
+    public ResponseEntity deletaTodos() {
+        funcionarioService.deletaTodos();
+
+        return ResponseEntity.ok().build();
     }
 }

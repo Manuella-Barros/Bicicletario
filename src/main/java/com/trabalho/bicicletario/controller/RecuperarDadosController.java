@@ -21,7 +21,7 @@ public class RecuperarDadosController {
         recuperarDadosService.recuperarDados();
     }
 
-    @GetMapping("/teste")
+    @GetMapping("/teste") // TODO - APAGAR
     public String testa() {
         return "FOI!!!";
     }

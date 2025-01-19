@@ -206,4 +206,12 @@ public class AluguelService {
 
         return alugueis;
     }
+
+    public Iterable<Aluguel> pegaTodos(){
+        return aluguelRepository.findAll();
+    }
+
+    public void deletaTodos(){
+        aluguelRepository.deleteAll();
+    }
 }

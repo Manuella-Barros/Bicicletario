@@ -223,4 +223,12 @@ public class CiclistaService {
             this.createMockCiclista(ciclistaInfo, cartao);
         }
     }
+
+    public Iterable<Ciclista> pegaTodos(){
+        return ciclistaRepository.findAll();
+    }
+
+    public void deletaTodos(){
+        ciclistaRepository.deleteAll();
+    }
 }

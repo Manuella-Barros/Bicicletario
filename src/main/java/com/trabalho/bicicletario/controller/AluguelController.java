@@ -57,4 +57,18 @@ public class AluguelController {
         } catch (CustomException e) {
             throw new CustomException(e);
         }}
+
+    @GetMapping("/aluguel/getAll") // TODO - APAGAR
+    public ResponseEntity<Iterable<Aluguel>> pegaTodos() {
+        Iterable<Aluguel> alugueis = aluguelService.pegaTodos();
+
+        return ResponseEntity.ok(alugueis);
+    }
+
+    @DeleteMapping("/aluguel/deleteAll") // TODO - APAGAR
+    public ResponseEntity deletaTodos() {
+        aluguelService.deletaTodos();
+
+        return ResponseEntity.ok().build();
+    }
 }
