@@ -41,6 +41,6 @@ public class Cartao {
     }
 
     public boolean checkIfValid(){
-        return this.nomeTitular != null && this.numero != null && this.validade != null && this.cvv != null;
+        return this.nomeTitular != null && this.numero != null && this.validade != null && this.cvv != null && (this.cvv.length() == 3 || this.cvv.length() == 4);
     }
 }

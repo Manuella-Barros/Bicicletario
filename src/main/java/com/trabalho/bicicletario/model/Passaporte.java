@@ -31,6 +31,6 @@ public class Passaporte {
     }
 
     public boolean checkIfValid(){
-        return this.numero != null && this.validade != null && this.pais != null;
+        return this.numero != null && this.validade != null && this.pais != null && this.pais.length() == 2;
     }
 }

@@ -76,7 +76,7 @@ public class Ciclista {
     }
 
     public boolean checkIfValid(){
-        return nascimento != null && nome != null && nacionalidade != null && email != null && senha != null;
+        return nascimento != null && nome != null && nacionalidade != null && email != null && senha != null && (cpf == null || cpf.length() == 11);
     }
 
     public boolean checkIfBrasileiro(){

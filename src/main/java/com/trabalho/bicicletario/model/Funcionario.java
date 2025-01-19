@@ -37,7 +37,7 @@ public class Funcionario {
     }
 
     public boolean checkIfValid(){
-        return this.senha != null && this.confirmacaoSenha != null && this.email != null && this.nome != null
+        return this.senha != null && this.confirmacaoSenha != null && this.senha.equals(this.confirmacaoSenha) && this.email != null && this.nome != null
                 && this.funcao != null && this.cpf != null && this.matricula != 0;
     }
 }
