@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Service
 public class AluguelService {
@@ -80,8 +81,19 @@ public class AluguelService {
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
-        Aluguel aluguel = aluguelRepository.findByCiclista(idCiclista);
-        return ResponseEntity.ok(aluguel);
+        Aluguel alugueis[] = aluguelRepository.findAllByCiclista(idCiclista);
+
+        if(alugueis.length == 0){
+            return ResponseEntity.ok().build();
+        }
+
+        for (Aluguel aluguel : alugueis){
+            if (aluguel.getTrancaFim() == 0){
+                return ResponseEntity.ok(aluguel);
+            }
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<Aluguel> postDevolucao(Aluguel aluguel) throws CustomException {
