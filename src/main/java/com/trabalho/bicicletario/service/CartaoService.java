@@ -5,6 +5,7 @@ import com.trabalho.bicicletario.model.Cartao;
 import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.repository.CartaoRepository;
+import com.trabalho.bicicletario.repository.CiclistaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

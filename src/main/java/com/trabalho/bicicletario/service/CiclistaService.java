@@ -232,4 +232,32 @@ public class CiclistaService {
     public void deletaTodos(){
         ciclistaRepository.deleteAll();
     }
+
+    public ResponseEntity<Cartao> getCartaoByCiclistaId(int id) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+        }
+
+        Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
+
+        if(!optionalCiclista.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+        }
+
+        return this.cartaoService.getCartaoById(optionalCiclista.get().getIdCartao());
+    }
+
+    public ResponseEntity<Cartao> updateCartaoByCiclistaId(int id, Cartao updateCartao) throws CustomException {
+        if(id <= 0){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+        }
+
+        Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
+
+        if(!optionalCiclista.isPresent()){
+            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+        }
+
+        return this.cartaoService.updateCartao(optionalCiclista.get().getIdCartao(), updateCartao);
+    }
 }
