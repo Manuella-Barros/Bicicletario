@@ -35,6 +35,10 @@ public class AluguelController {
                 throw new CustomException(ErrorEnum.CICLISTA_INATIVO);
             }
 
+            if (ciclistaService.hasAluguel(ciclista.getId())){
+                throw new CustomException(ErrorEnum.JA_TEM_ALUGUEL);
+            }
+
             ResponseEntity<Aluguel> aluguel = aluguelService.createAluguel(newAluguel, ciclista);
 
             return ResponseEntity.ok(aluguel.getBody());
