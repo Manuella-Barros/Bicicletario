@@ -205,6 +205,7 @@ public class CiclistaService {
     public void recuperarDados() throws IOException, CustomException {
         this.deleteAllCiclistas();
         this.cartaoService.deleteAllCartoes();
+        this.passaporteService.deleteAllPassaportes();
 
         ClassPathResource resource = new ClassPathResource("jsons/ciclistas.json");
         String json;

@@ -55,4 +55,7 @@ public class PassaporteService {
         return ResponseEntity.ok(updatedPassaporte);
     }
 
+    public void deleteAllPassaportes() {
+        this.passaporteRepository.deleteAll();
+    }
 }

@@ -1,7 +1,7 @@
 [
   {
     "identificador": 1,
-    "statusConfirmacaoConta": "CONFIRMADO",
+    "statusConfirmacaoConta": "ATIVO",
     "nome": "Fulano Beltrano",
     "nascimento": "2021-05-02",
     "cpf": "78804034009",
@@ -33,7 +33,7 @@
   },
   {
     "identificador": 3,
-    "statusConfirmacaoConta": "CONFIRMADO",
+    "statusConfirmacaoConta": "ATIVO",
     "nome": "Fulano Beltrano",
     "nascimento": "2021-05-02",
     "cpf": "10243164084",
@@ -49,7 +49,7 @@
   },
   {
     "identificador": 4,
-    "statusConfirmacaoConta": "CONFIRMADO",
+    "statusConfirmacaoConta": "ATIVO",
     "nome": "Fulano Beltrano",
     "nascimento": "2021-05-02",
     "cpf": "30880150017",
