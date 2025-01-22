@@ -48,6 +48,15 @@ public class RecuperarDadosController {
         return response;
     }
 
+    @GetMapping("/teste1") // TODO - APAGAR
+    public ResponseEntity<CEP> teste1() {
+//       String url = "https://bicicletario.onrender.com/bicicleta/1";
+        String url = "https://viacep.com.br/ws/01001000/json/";
+        ResponseEntity<CEP> response = restTemplate.getForEntity(url, CEP.class);
+
+        return response;
+    }
+
     public ResponseEntity<String> testa() {
         // WEB CLIENT ---------------------------------------------------
 //        BicicletaTeste bicicletaTeste = webClient.get().uri("https://bicicletario.onrender.com/bicicleta/1").retrieve().bodyToMono(BicicletaTeste.class).block();
