@@ -28,13 +28,13 @@ public class Bicicleta {
     }
 
     public Bicicleta(Bicicleta bicicleta) {
+        setStatus(StatusBicicletaEnum.NOVA.getDescricao());
         this.id = bicicleta.getId();
         this.marca = bicicleta.getMarca();
         this.modelo = bicicleta.getModelo();
         this.ano = bicicleta.getAno();
         this.numero = bicicleta.getNumero();
         this.status = bicicleta.getStatus();
-        setStatus(StatusBicicletaEnum.NOVA.getDescricao());
     }
 
     public Bicicleta alterarStatusBicicleta(String status, int idBicicleta){
@@ -44,7 +44,8 @@ public class Bicicleta {
 
     public Bicicleta getBicicleta(int idBicicleta){
         this.id = idBicicleta;
-        return new Bicicleta();
+        this.status = StatusBicicletaEnum.NOVA.getDescricao();
+        return this;
     }
 
     public Bicicleta cadastrarBicicleta(Bicicleta bicicleta){

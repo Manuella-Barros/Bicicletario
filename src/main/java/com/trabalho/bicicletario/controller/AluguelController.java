@@ -50,9 +50,8 @@ public class AluguelController {
     @PostMapping("/devolucao")
     public ResponseEntity<Aluguel> realizarDevolucao(@RequestBody RealizarDevolucaoDTO newDevolucaoDTO) throws CustomException {
         try{
-            Aluguel devolucao = new Aluguel(0, newDevolucaoDTO.getIdTranca(), newDevolucaoDTO.getIdBicicleta());
             Email email = new Email();
-            ResponseEntity<Aluguel> aluguel = aluguelService.postDevolucao(devolucao);
+            ResponseEntity<Aluguel> aluguel = aluguelService.postDevolucao(newDevolucaoDTO.getIdBicicleta(), newDevolucaoDTO.getIdTranca());
             ResponseEntity<CiclistaResponseDTO> ciclistaDTO = ciclistaService.getCiclistaById(aluguel.getBody().getCiclista());
 
             email.enviarEmail(ciclistaDTO.getBody().getEmail(), "Devolução realizada", "A devolução da bicicleta foi realizada com sucesso!");
