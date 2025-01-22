@@ -1,9 +1,6 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.exception.CustomException;
-import com.trabalho.bicicletario.model.Bicicleta;
-import com.trabalho.bicicletario.model.BicicletaTeste;
-import com.trabalho.bicicletario.model.CEP;
 import com.trabalho.bicicletario.service.RecuperarDadosService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 @RestController()
 @RequestMapping("/restaurarDados")
@@ -41,18 +33,18 @@ public class RecuperarDadosController {
 
     @GetMapping("/teste") // TODO - APAGAR
     public ResponseEntity<String> teste() {
-//       String url = "https://bicicletario.onrender.com/bicicleta/1";
-        String url = "https://viacep.com.br/ws/01001000/json/";
+       String url = "https://bicicletario.onrender.com/bicicleta/1";
+//        String url = "https://viacep.com.br/ws/01001000/json/";
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
         return response;
     }
 
     @GetMapping("/teste1") // TODO - APAGAR
-    public ResponseEntity<CEP> teste1() {
+    public ResponseEntity<?> teste1() {
 //       String url = "https://bicicletario.onrender.com/bicicleta/1";
         String url = "https://viacep.com.br/ws/01001000/json/";
-        ResponseEntity<CEP> response = restTemplate.getForEntity(url, CEP.class);
+        ResponseEntity<?> response = restTemplate.getForEntity(url, String.class);
 
         return response;
     }

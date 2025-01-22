@@ -20,13 +20,15 @@ public class AluguelService {
     Totem totem;
     Bicicleta bicicleta;
     Email email;
+    Cobranca cobranca;
 
-    public AluguelService(AluguelRepository aluguelRepository, Tranca tranca, Totem totem, Bicicleta bicicleta, Email email) {
+    public AluguelService(AluguelRepository aluguelRepository, Tranca tranca, Totem totem, Bicicleta bicicleta, Email email, Cobranca cobranca) {
         this.aluguelRepository = aluguelRepository;
         this.tranca = tranca;
         this.totem = totem;
         this.bicicleta = bicicleta;
         this.email = email;
+        this.cobranca= cobranca;
     }
 
     public ResponseEntity<Aluguel> createAluguel(Aluguel aluguel, Ciclista ciclista) throws CustomException {
@@ -37,7 +39,6 @@ public class AluguelService {
 
             isAbleToAlugar(aluguel.getTrancaInicio(), aluguel.getCiclista(), aluguel.getBicicleta());
 
-            Cobranca cobranca = new Cobranca();
             boolean isPagamentoAutorizado = cobranca.enviarCobranca(aluguel.getCiclista(), aluguel.getCobranca());
 
             if(!isPagamentoAutorizado){
