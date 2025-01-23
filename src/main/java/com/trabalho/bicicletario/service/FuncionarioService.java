@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class FuncionarioService {
@@ -27,7 +29,12 @@ public class FuncionarioService {
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
+        Random random = new Random();
+
+        funcionario.setMatricula(random.nextInt(10000, 100000));
+
         Funcionario createdFuncionario = funcionarioRepository.save( funcionario );
+
         return ResponseEntity.ok(createdFuncionario);
     }
 

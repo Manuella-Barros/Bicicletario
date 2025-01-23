@@ -55,16 +55,4 @@ public class CartaoController {
 
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/")
-    public ResponseEntity<Cartao> createCartao(@RequestBody CartaoDTO newCartaoDTO) throws CustomException {
-        try{
-            Cartao newCartao = new Cartao(newCartaoDTO);
-            ResponseEntity<Cartao> cartao = cartaoService.createCartao(newCartao);
-
-            return ResponseEntity.ok(cartao.getBody());
-        } catch (CustomException e) {
-            throw new CustomException(e);
-        }
-    }
 }
