@@ -1,6 +1,8 @@
 package com.trabalho.bicicletario.model.integracoes;
 
 import com.trabalho.bicicletario.model.Cartao;
+import com.trabalho.bicicletario.model.integracoes.DTOs.CobrancaDTO;
+import com.trabalho.bicicletario.model.integracoes.DTOs.responses.CobrancaResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -11,20 +13,13 @@ import org.springframework.web.client.RestTemplate;
 @AllArgsConstructor
 public class Cobranca {
 
-    @AllArgsConstructor
-    public class CobrancaDTO{
-        int idCiclista;
-        double valor;
-    }
-
-//    @Autowired
     @Qualifier("restTemplate") private final RestTemplate restTemplate;
-    private final String url = "https://bicicletario-gimk.onrender.com/externo/validaCartaoDeCredito";
+    private final String url = "https://bicicletario-gimk.onrender.com/externo/";
 
 
     public boolean validarCartao(Cartao cartao) {
         //valida cartão no externo
-        String urlReq = url+ "externo/validaCartaoDeCredito";
+        String urlReq = url+ "validaCartaoDeCredito";
 
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(urlReq, cartao, String.class);
@@ -39,14 +34,13 @@ public class Cobranca {
     }
 
     public boolean enviarCobranca(int idCiclista, Double valor) {
-        //enviacobranca externa
-        String urlReq = url+ "externo/cobranca";
+        //envia cobranca no externao
+        String urlReq = url+ "cobranca";
 
         CobrancaDTO cobrancaDTO = new CobrancaDTO(idCiclista, valor);
 
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(urlReq, cobrancaDTO, String.class);
-
+            ResponseEntity<CobrancaResponseDTO> response = restTemplate.postForEntity(urlReq, cobrancaDTO, CobrancaResponseDTO.class);
             if (!response.getStatusCode().is2xxSuccessful()) {
                 return false;
             }
