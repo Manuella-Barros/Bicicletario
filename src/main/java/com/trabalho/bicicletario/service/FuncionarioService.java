@@ -52,7 +52,7 @@ public class FuncionarioService {
         Optional<Funcionario> optionalFuncionario = funcionarioRepository.findById( id );
 
         if(!optionalFuncionario.isPresent()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         return ResponseEntity.ok(optionalFuncionario.get());
@@ -104,7 +104,7 @@ public class FuncionarioService {
         Funcionario[] funcionarios = objectMapper.readValue(json, Funcionario[].class);
 
         for (Funcionario funcionario : funcionarios) {
-            this.createFuncionario(funcionario);
+            this.funcionarioRepository.save( funcionario );
         }
     }
 
