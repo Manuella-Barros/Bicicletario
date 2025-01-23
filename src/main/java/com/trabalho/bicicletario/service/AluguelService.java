@@ -6,6 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
+import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
+import com.trabalho.bicicletario.model.Enum.StatusTrancaEnum;
 import com.trabalho.bicicletario.model.integracoes.*;
 import com.trabalho.bicicletario.repository.AluguelRepository;
 import org.springframework.http.ResponseEntity;

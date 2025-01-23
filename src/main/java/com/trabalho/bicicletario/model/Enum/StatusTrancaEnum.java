@@ -1,4 +1,4 @@
-package com.trabalho.bicicletario.model.integracoes;
+package com.trabalho.bicicletario.model.Enum;
 
 public enum StatusTrancaEnum {
     NOVA("Nova"),

@@ -1,6 +1,7 @@
 package com.trabalho.bicicletario.model.integracoes;
 
 import com.trabalho.bicicletario.model.Bicicleta;
+import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
 import org.springframework.stereotype.Service;
 
 @Service

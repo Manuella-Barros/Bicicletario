@@ -1,6 +1,6 @@
 package com.trabalho.bicicletario.model;
 
-import com.trabalho.bicicletario.model.integracoes.StatusBicicletaEnum;
+import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

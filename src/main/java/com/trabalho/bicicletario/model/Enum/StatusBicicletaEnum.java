@@ -1,7 +1,7 @@
 package com.trabalho.bicicletario.model.Enum;
 
 public enum StatusBicicletaEnum {
-    DISPONÍVEL("DISPONÍVEL"),
+    DISPONIVEL("DISPONÍVEL"),
     EM_USO("EM_USO"),
     NOVA("NOVA"),
     APOSENTADA("APOSENTADA"),
