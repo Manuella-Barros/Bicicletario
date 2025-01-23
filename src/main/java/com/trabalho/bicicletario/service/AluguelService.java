@@ -19,15 +19,13 @@ import java.time.LocalDateTime;
 public class AluguelService {
     AluguelRepository aluguelRepository;
     Tranca tranca;
-    Totem totem;
     Bicicleta bicicleta;
     Email email;
     Cobranca cobranca;
 
-    public AluguelService(AluguelRepository aluguelRepository, Tranca tranca, Totem totem, Bicicleta bicicleta, Email email, Cobranca cobranca) {
+    public AluguelService(AluguelRepository aluguelRepository, Tranca tranca, Bicicleta bicicleta, Email email, Cobranca cobranca) {
         this.aluguelRepository = aluguelRepository;
         this.tranca = tranca;
-        this.totem = totem;
         this.bicicleta = bicicleta;
         this.email = email;
         this.cobranca= cobranca;
@@ -157,7 +155,7 @@ public class AluguelService {
             throw new CustomException(ErrorEnum.JA_TEM_ALUGUEL);
         }
 
-        if(this.totem.getBicicleta(idTranca).getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
+        if(this.tranca.getBicicletaByIdTranca(idTranca).getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
             throw new CustomException(ErrorEnum.BICICLETA_EM_REPARO);
         }
     }
