@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.Aluguel;
 import com.trabalho.bicicletario.model.Ciclista;
-import com.trabalho.bicicletario.model.integracoes.Tranca;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
