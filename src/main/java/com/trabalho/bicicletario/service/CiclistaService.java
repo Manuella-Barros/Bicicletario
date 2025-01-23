@@ -77,6 +77,7 @@ public class CiclistaService {
         }
 
         if(email.enviarEmail(ciclista.getEmail(), "Cadastro realizado!", "Seu cadastro foi realizado com sucesso!") == null){
+            deleteCiclistaById(createdCiclista.getId());
             throw new CustomException(ErrorEnum.ERRO_ENVIO_EMAIL);
         }
 
@@ -259,5 +260,9 @@ public class CiclistaService {
         }
 
         return this.cartaoService.updateCartao(optionalCiclista.get().getIdCartao(), updateCartao);
+    }
+
+    public void deleteCiclistaById(int id) throws CustomException {
+        ciclistaRepository.deleteById( id );
     }
 }

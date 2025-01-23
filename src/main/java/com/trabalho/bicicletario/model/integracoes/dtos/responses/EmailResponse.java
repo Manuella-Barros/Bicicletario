@@ -14,7 +14,7 @@ public class EmailResponse {
     private int id;
 
     @JsonProperty("email")
-    private String destinatario;
+    private String email;
 
     @JsonProperty("assunto")
     private String assunto;
