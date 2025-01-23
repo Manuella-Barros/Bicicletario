@@ -41,48 +41,50 @@ class EmailTestIntegracao {
         String mensagem = "Esta é uma mensagem de teste.";
         String urlReq = "https://bicicletario-gimk.onrender.com/externo/enviarEmail";
 
-        EmailDTO emailDTO = new EmailDTO("", "", "");
+        EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem);
         EmailResponse mockResponse = new EmailResponse(1, "", "", "");
 
-        when(restTemplate.postForEntity(urlReq, emailDTO, EmailResponse.class))
+        when(restTemplate.postForEntity(urlReq,emailDTO, EmailResponse.class))
                 .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
 
-        EmailResponse resposta = email.enviarEmail("", "", "");
+        EmailResponse resposta = email.enviarEmail(emailDTO);
 
         assertNotNull(resposta);
     }
 
     @Test
-    void enviarEmail_falha_retornaNull() {
+    void enviarEmail_falha_NotFound() {
         String destinatario = "usuario@email.com";
         String assunto = "Teste de Email";
         String mensagem = "Esta é uma mensagem de teste.";
         String urlReq = "https://bicicletario-gimk.onrender.com/externo/enviarEmail";
 
         EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem);
+        EmailResponse mockResponse = new EmailResponse(1, "", "", "");
 
         when(restTemplate.postForEntity(urlReq, emailDTO, EmailResponse.class))
-                .thenReturn(new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
+                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.NOT_FOUND));
 
-        EmailResponse resposta = email.enviarEmail(destinatario, assunto, mensagem);
+        EmailResponse resposta = email.enviarEmail(emailDTO);
 
-        assertNull(resposta, "A resposta deveria ser nula para um status inválido.");
+        assertNull(resposta);
     }
-//
-//    @Test
-//    void enviarEmail_excecao_retornaNull() {
-//        String destinatario = "usuario@email.com";
-//        String assunto = "Teste de Email";
-//        String mensagem = "Esta é uma mensagem de teste.";
-//        String urlReq = "https://bicicletario-gimk.onrender.com/externo/enviarEmail";
-//
-//        EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem);
-//
-//        when(restTemplate.postForEntity(urlReq, emailDTO, EmailResponse.class))
-//                .thenThrow(new RuntimeException("Erro ao enviar email."));
-//
-//        EmailResponse resposta = email.enviarEmail(destinatario, assunto, mensagem);
-//
-//        assertNull(resposta, "A resposta deveria ser nula em caso de exceção.");
-//    }
+
+    @Test
+    void enviarEmail_excecao_DadosInvalidos() {
+        String destinatario = "usuario@email.com";
+        String assunto = "Teste de Email";
+        String mensagem = "Esta é uma mensagem de teste.";
+        String urlReq = "https://bicicletario-gimk.onrender.com/externo/enviarEmail";
+
+        EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem);
+        EmailResponse mockResponse = new EmailResponse(1, "", "", "");
+
+        when(restTemplate.postForEntity(urlReq, emailDTO, EmailResponse.class))
+                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.UNPROCESSABLE_ENTITY));
+
+        EmailResponse resposta = email.enviarEmail(emailDTO);
+
+        assertNull(resposta);
+    }
 }

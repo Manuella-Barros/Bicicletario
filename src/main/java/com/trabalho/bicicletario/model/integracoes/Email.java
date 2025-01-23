@@ -15,12 +15,10 @@ public class Email {
     @Qualifier("restTemplate") private final RestTemplate restTemplate;
     private final String url = "https://bicicletario-gimk.onrender.com/externo/";
 
-    public EmailResponse enviarEmail(String destinatario, String assunto, String mensagem) {
+    public EmailResponse enviarEmail(EmailDTO emailDTO) {
         //manda o email no externo
         //cria url
         String urlReq = url+ "enviarEmail";
-        //montar email pra envio pra api
-        EmailDTO emailDTO = new EmailDTO(destinatario, assunto, mensagem);
 
         EmailResponse emailResponse = null;
         try {

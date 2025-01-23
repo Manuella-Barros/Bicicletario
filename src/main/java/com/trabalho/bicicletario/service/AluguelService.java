@@ -10,6 +10,7 @@ import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
 import com.trabalho.bicicletario.model.Enum.StatusTrancaEnum;
 import com.trabalho.bicicletario.model.integracoes.*;
+import com.trabalho.bicicletario.model.integracoes.dtos.EmailDTO;
 import com.trabalho.bicicletario.model.integracoes.dtos.responses.BicicletaResponse;
 import com.trabalho.bicicletario.repository.AluguelRepository;
 import org.springframework.http.ResponseEntity;
@@ -70,16 +71,18 @@ public class AluguelService {
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.EM_USO.getDescricao(), createdAluguel.getBicicleta());
             tranca.alterarStatusTranca(StatusTrancaEnum.DESTRANCAR.getDescricao(), createdAluguel.getTrancaInicio());
 
-            email.enviarEmail(ciclista.getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!\n\n " +
-                            "Dados do aluguel:\n" +
-                            "- Horario: " + createdAluguel.getHoraInicio() + ".\n" +
-                            "- Tranca: " + createdAluguel.getTrancaInicio() + ".\n" +
-                            "- Valor: " + createdAluguel.getCobranca() + ".");
+            EmailDTO emailDTO = new EmailDTO(ciclista.getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!\n\n " +
+                    "Dados do aluguel:\n" +
+                    "- Horario: " + createdAluguel.getHoraInicio() + ".\n" +
+                    "- Tranca: " + createdAluguel.getTrancaInicio() + ".\n" +
+                    "- Valor: " + createdAluguel.getCobranca() + ".");
+            email.enviarEmail(emailDTO);
 
             return ResponseEntity.ok(createdAluguel);
         } catch (CustomException e) {
             if(e.getMensagem().equals(ErrorEnum.JA_TEM_ALUGUEL.getMensagem())){
-                email.enviarEmail(ciclista.getEmail(), "Aluguel negado", "O aluguel da bicicleta foi negado pois o usuário já possui um aluguel");
+                EmailDTO emailDTO = new EmailDTO(ciclista.getEmail(), "Aluguel negado", "O aluguel da bicicleta foi negado pois o usuário já possui um aluguel");
+                email.enviarEmail(emailDTO);
             }
 
             throw new CustomException(e);

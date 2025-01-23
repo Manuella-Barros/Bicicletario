@@ -10,6 +10,7 @@ import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Enum.StatusCiclistaEnum;
 import com.trabalho.bicicletario.model.integracoes.Cobranca;
 import com.trabalho.bicicletario.model.integracoes.Email;
+import com.trabalho.bicicletario.model.integracoes.dtos.EmailDTO;
 import com.trabalho.bicicletario.repository.CiclistaRepository;
 import com.trabalho.bicicletario.repository.implementations.CiclistaRepositoryImpl;
 import jakarta.persistence.EntityManager;
@@ -76,7 +77,8 @@ public class CiclistaService {
             response.setPassaporte(createdPassaporte.getBody());
         }
 
-        if(email.enviarEmail(ciclista.getEmail(), "Cadastro realizado!", "Seu cadastro foi realizado com sucesso!") == null){
+        EmailDTO emailDTO = new EmailDTO(ciclista.getEmail(), "Cadastro realizado!", "Seu cadastro foi realizado com sucesso!");
+        if(email.enviarEmail(emailDTO) == null){
             deleteCiclistaById(createdCiclista.getId());
             throw new CustomException(ErrorEnum.ERRO_ENVIO_EMAIL);
         }
@@ -124,7 +126,8 @@ public class CiclistaService {
 
         Ciclista updatedCiclista = ciclistaRepository.save( updateCiclista );
 
-        if(email.enviarEmail(updatedCiclista.getEmail(), "Atualização realizado!", "Seu cadastro foi atualizado com sucesso!") == null){
+        EmailDTO emailDTO = new EmailDTO(updatedCiclista.getEmail(), "Atualização realizado!", "Seu cadastro foi atualizado com sucesso!");
+        if(email.enviarEmail(emailDTO) == null){
             throw new CustomException(ErrorEnum.ERRO_ENVIO_EMAIL);
         }
 

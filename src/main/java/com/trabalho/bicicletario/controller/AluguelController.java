@@ -7,6 +7,7 @@ import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.integracoes.Email;
+import com.trabalho.bicicletario.model.integracoes.dtos.EmailDTO;
 import com.trabalho.bicicletario.service.AluguelService;
 import com.trabalho.bicicletario.service.CiclistaService;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,8 @@ public class AluguelController {
             ResponseEntity<Aluguel> aluguel = aluguelService.postDevolucao(newDevolucaoDTO.getIdBicicleta(), newDevolucaoDTO.getIdTranca());
             ResponseEntity<CiclistaResponseDTO> ciclistaDTO = ciclistaService.getCiclistaById(aluguel.getBody().getCiclista());
 
-            email.enviarEmail(ciclistaDTO.getBody().getEmail(), "Devolução realizada", "A devolução da bicicleta foi realizada com sucesso!");
+            EmailDTO emailDTO = new EmailDTO(ciclistaDTO.getBody().getEmail(), "Devolução realizada", "A devolução da bicicleta foi realizada com sucesso!");
+            email.enviarEmail(emailDTO);
 
             return ResponseEntity.ok(aluguel.getBody());
         } catch (CustomException e) {

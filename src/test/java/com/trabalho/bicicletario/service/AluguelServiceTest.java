@@ -14,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AluguelServiceTest {
 
-    @Spy
-    private Tranca tranca;
     @InjectMocks
     AluguelService aluguelService;
 
@@ -27,7 +25,7 @@ class AluguelServiceTest {
     @Test
     public void testaCriaAluguelComErro() throws CustomException {
         Aluguel aluguel = new Aluguel();
-        aluguel.setTrancaInicio(1);
+        aluguel.setTrancaInicio(0);
         Ciclista ciclista = new Ciclista();
 
         assertThrows(CustomException.class, () -> {
