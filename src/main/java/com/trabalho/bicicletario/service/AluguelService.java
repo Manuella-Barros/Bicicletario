@@ -62,7 +62,7 @@ public class AluguelService {
             Aluguel createdAluguel = aluguelRepository.save(aluguel);
 
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.EM_USO.getDescricao(), createdAluguel.getBicicleta());
-            tranca.alterarStatusTranca(StatusTrancaEnum.LIVRE.getDescricao(), createdAluguel.getTrancaInicio());
+            tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), createdAluguel.getTrancaInicio());
 
             email.enviarEmail(ciclista.getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!");
 
@@ -125,7 +125,7 @@ public class AluguelService {
             aluguel.setHoraFim(dataDevolucao);
             aluguel.setTrancaFim(idTranca);
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.DISPONIVEL.getDescricao(), aluguel.getBicicleta());
-            tranca.alterarStatusTranca(StatusTrancaEnum.OCUPADA.getDescricao(), aluguel.getTrancaInicio());
+            tranca.alterarStatusTranca(StatusTrancaEnum.DESTRANCAR.getDescricao(), aluguel.getTrancaInicio());
 
             Aluguel createdAluguel = aluguelRepository.save(aluguel);
 
