@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @AllArgsConstructor
 public class Bicicleta {
+
     @Qualifier("restTemplate") private final RestTemplate restTemplate;
     private final String url = "https://bicicletario.onrender.com/";
 
