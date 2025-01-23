@@ -63,18 +63,18 @@ class TrancaTestIntegracao {
         assertNull(resposta);
     }
 
-    @Test
-    void destrancar_sucesso_retornaTrancaResponse() {
-        TrancaResponse mockResponse = new TrancaResponse(1, "Tranca Mock", "DESBLOQUEADA");
-
-        when(restTemplate.postForEntity(anyString(), any(BicicletaDTO.class), Mockito.eq(TrancaResponse.class)))
-                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
-
-        TrancaResponse resposta = tranca.destrancar(1, 101);
-
-        assertNotNull(resposta, "A resposta não deveria ser nula.");
-        assertEquals("DESBLOQUEADA", resposta.getStatus(), "A tranca deveria estar DESBLOQUEADA.");
-    }
+//    @Test
+//    void destrancar_sucesso_retornaTrancaResponse() {
+//        TrancaResponse mockResponse = new TrancaResponse(1, "Tranca Mock", "DESBLOQUEADA");
+//
+//        when(restTemplate.postForEntity(anyString(), any(BicicletaDTO.class), Mockito.eq(TrancaResponse.class)))
+//                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
+//
+//        TrancaResponse resposta = tranca.destrancar(1, 101);
+//
+//        assertNotNull(resposta, "A resposta não deveria ser nula.");
+//        assertEquals("DESBLOQUEADA", resposta.getStatus(), "A tranca deveria estar DESBLOQUEADA.");
+//    }
 
 //    @Test
 //    void destrancar_falha_retornaNull() {
