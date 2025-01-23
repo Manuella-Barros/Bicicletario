@@ -1,13 +1,13 @@
 package com.trabalho.bicicletario.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.trabalho.bicicletario.dto.CartaoDTO;
 import com.trabalho.bicicletario.util.converter.YearMonthStringConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 
 @Entity
@@ -38,6 +38,17 @@ public class Cartao {
         this.numero = cartao.getNumero();
         this.validade = cartao.getValidade();
         this.cvv = cartao.getCvv();
+    }
+
+    public Cartao(CartaoDTO cartaoDTO) {
+        this.nomeTitular = cartaoDTO.getNomeTitular();
+        this.numero = cartaoDTO.getNumero();
+        this.cvv = cartaoDTO.getCvv();
+
+        String oldValiditty = cartaoDTO.getValidade().substring(0,7);
+
+        YearMonthStringConverter converter = new YearMonthStringConverter();
+        this.validade = converter.convertToEntityAttribute(oldValiditty);
     }
 
     public boolean checkIfValid(){

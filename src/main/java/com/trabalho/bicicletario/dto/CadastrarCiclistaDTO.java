@@ -1,12 +1,10 @@
 package com.trabalho.bicicletario.dto;
 
-import com.trabalho.bicicletario.model.Cartao;
-
 public class CadastrarCiclistaDTO {
     public CiclistaDTO ciclistaDTO;
-    public Cartao meioDePagamento;
+    public CartaoDTO meioDePagamento;
 
-    public CadastrarCiclistaDTO(CiclistaDTO ciclista, Cartao meioDePagamento) {
+    public CadastrarCiclistaDTO(CiclistaDTO ciclista, CartaoDTO meioDePagamento) {
         this.ciclistaDTO = ciclista;
         this.meioDePagamento = meioDePagamento;
     }
@@ -19,11 +17,11 @@ public class CadastrarCiclistaDTO {
         this.ciclistaDTO = ciclistaDTO;
     }
 
-    public Cartao getMeioDePagamento() {
+    public CartaoDTO getMeioDePagamento() {
         return meioDePagamento;
     }
 
-    public void setMeioDePagamento(Cartao meioDePagamento) {
+    public void setMeioDePagamento(CartaoDTO meioDePagamento) {
         this.meioDePagamento = meioDePagamento;
     }
 }
