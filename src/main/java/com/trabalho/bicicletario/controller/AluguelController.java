@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class AluguelController {
     AluguelService aluguelService;
     CiclistaService ciclistaService;
+    Email email;
 
-    public AluguelController(AluguelService aluguelService, CiclistaService ciclistaService) {
+    public AluguelController(AluguelService aluguelService, CiclistaService ciclistaService, Email email) {
         this.aluguelService = aluguelService;
         this.ciclistaService = ciclistaService;
+        this.email=email;
     }
 
     @PostMapping("/aluguel")
@@ -50,7 +52,6 @@ public class AluguelController {
     @PostMapping("/devolucao")
     public ResponseEntity<Aluguel> realizarDevolucao(@RequestBody RealizarDevolucaoDTO newDevolucaoDTO) throws CustomException {
         try{
-            Email email = new Email();
             ResponseEntity<Aluguel> aluguel = aluguelService.postDevolucao(newDevolucaoDTO.getIdBicicleta(), newDevolucaoDTO.getIdTranca());
             ResponseEntity<CiclistaResponseDTO> ciclistaDTO = ciclistaService.getCiclistaById(aluguel.getBody().getCiclista());
 

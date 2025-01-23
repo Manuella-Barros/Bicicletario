@@ -1,8 +1,8 @@
 package com.trabalho.bicicletario.model.integracoes;
 
 import com.trabalho.bicicletario.model.Cartao;
-import com.trabalho.bicicletario.model.integracoes.DTOs.CobrancaDTO;
-import com.trabalho.bicicletario.model.integracoes.DTOs.responses.CobrancaResponseDTO;
+import com.trabalho.bicicletario.model.integracoes.dtos.CobrancaDTO;
+import com.trabalho.bicicletario.model.integracoes.dtos.responses.CobrancaResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;

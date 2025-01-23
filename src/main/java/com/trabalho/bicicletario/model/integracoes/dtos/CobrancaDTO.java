@@ -1,4 +1,4 @@
-package com.trabalho.bicicletario.model.integracoes.DTOs;
+package com.trabalho.bicicletario.model.integracoes.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
