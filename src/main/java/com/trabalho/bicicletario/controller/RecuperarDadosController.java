@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.io.IOException;
 
 @RestController()
-@RequestMapping("/restaurarDados")
+@RequestMapping("/restaurarBanco")
 public class RecuperarDadosController {
     RecuperarDadosService recuperarDadosService;
     private final WebClient webClient;

@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 public class Tranca {
 
     @Qualifier("restTemplate") private final RestTemplate restTemplate;
-    private final String url = "https://bicicletario-4u7u.onrender.com/";
+    private final String url = "https://bicicletario.onrender.com/";
 
     public TrancaResponse getTranca(int idTranca){
         //busca tranca no equipamento

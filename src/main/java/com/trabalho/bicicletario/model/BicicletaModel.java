@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Setter @Getter
 @Service
-public class Bicicleta {
+public class BicicletaModel {
     private int id;
     private String marca;
     private String modelo;
@@ -17,7 +17,7 @@ public class Bicicleta {
     private int numero;
     private String status;
 
-    public Bicicleta(int id, String marca, String modelo, String ano, int numero, String status) {
+    public BicicletaModel(int id, String marca, String modelo, String ano, int numero, String status) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
@@ -27,28 +27,28 @@ public class Bicicleta {
         setStatus(StatusBicicletaEnum.DISPONIVEL.getDescricao());
     }
 
-    public Bicicleta(Bicicleta bicicleta) {
+    public BicicletaModel(BicicletaModel bicicletaModel) {
         setStatus(StatusBicicletaEnum.NOVA.getDescricao());
-        this.id = bicicleta.getId();
-        this.marca = bicicleta.getMarca();
-        this.modelo = bicicleta.getModelo();
-        this.ano = bicicleta.getAno();
-        this.numero = bicicleta.getNumero();
-        this.status = bicicleta.getStatus();
+        this.id = bicicletaModel.getId();
+        this.marca = bicicletaModel.getMarca();
+        this.modelo = bicicletaModel.getModelo();
+        this.ano = bicicletaModel.getAno();
+        this.numero = bicicletaModel.getNumero();
+        this.status = bicicletaModel.getStatus();
     }
 
-    public Bicicleta alterarStatusBicicleta(String status, int idBicicleta){
+    public BicicletaModel alterarStatusBicicleta(String status, int idBicicleta){
         this.id = idBicicleta;
-        return new Bicicleta(id, marca, modelo, ano, numero, status);
+        return new BicicletaModel(id, marca, modelo, ano, numero, status);
     }
 
-    public Bicicleta getBicicleta(int idBicicleta){
+    public BicicletaModel getBicicleta(int idBicicleta){
         this.id = idBicicleta;
         this.status = StatusBicicletaEnum.NOVA.getDescricao();
         return this;
     }
 
-    public Bicicleta cadastrarBicicleta(Bicicleta bicicleta){
-        return new Bicicleta(bicicleta);
+    public BicicletaModel cadastrarBicicleta(BicicletaModel bicicletaModel){
+        return new BicicletaModel(bicicletaModel);
     }
 }

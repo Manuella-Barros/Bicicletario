@@ -49,4 +49,21 @@ public class Cobranca {
         }
         return true;
     }
+
+    public boolean adicionaFilaDeCobranca(int idCiclista, Double valor) {
+        //adiciona a cobrança na fila de cobranças
+        String urlReq = url+ "filaCobranca";
+
+        CobrancaDTO cobrancaDTO = new CobrancaDTO(idCiclista, valor);
+
+        try {
+            ResponseEntity<CobrancaResponseDTO> response = restTemplate.postForEntity(urlReq, cobrancaDTO, CobrancaResponseDTO.class);
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
 }

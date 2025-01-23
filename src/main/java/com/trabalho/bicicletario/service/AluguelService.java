@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
+import com.trabalho.bicicletario.model.BicicletaModel;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
 import com.trabalho.bicicletario.model.Enum.StatusTrancaEnum;
 import com.trabalho.bicicletario.model.integracoes.*;
+import com.trabalho.bicicletario.model.integracoes.dtos.responses.BicicletaResponse;
 import com.trabalho.bicicletario.repository.AluguelRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ public class AluguelService {
     Bicicleta bicicleta;
     Email email;
     Cobranca cobranca;
+    BicicletaModel bicicletaModel;
 
     public AluguelService(AluguelRepository aluguelRepository, Tranca tranca, Bicicleta bicicleta, Email email, Cobranca cobranca) {
         this.aluguelRepository = aluguelRepository;
@@ -39,9 +42,13 @@ public class AluguelService {
 
             isAbleToAlugar(aluguel.getTrancaInicio(), aluguel.getCiclista(), aluguel.getBicicleta());
 
+            if(aluguel.getCobranca() == 0)
+                aluguel.setCobranca(10.00);
+
             boolean isPagamentoAutorizado = cobranca.enviarCobranca(aluguel.getCiclista(), aluguel.getCobranca());
 
             if(!isPagamentoAutorizado){
+                cobranca.adicionaFilaDeCobranca(aluguel.getCiclista(), aluguel.getCobranca());
                 throw new CustomException(ErrorEnum.PAGAMENTO_NAO_AUTORIZADO);
             }
 
@@ -53,18 +60,21 @@ public class AluguelService {
             if(aluguel.getHoraFim() == null)
                 aluguel.setHoraFim(dataAtual);
 
-            if(aluguel.getCobranca() == 0)
-                aluguel.setCobranca(10.00);
-
-            if(aluguel.getBicicleta() == 0)
-                aluguel.setBicicleta(1); // TODO - /tranca/{idTranca}/bicicleta - Obter bicicleta na tranca
+            if(aluguel.getBicicleta() == 0){
+                BicicletaResponse bicicletaTranca = tranca.getBicicletaByIdTranca(aluguel.getTrancaInicio());
+                aluguel.setBicicleta(bicicletaTranca.getId());
+            }
 
             Aluguel createdAluguel = aluguelRepository.save(aluguel);
 
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.EM_USO.getDescricao(), createdAluguel.getBicicleta());
-            tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), createdAluguel.getTrancaInicio());
+            tranca.alterarStatusTranca(StatusTrancaEnum.DESTRANCAR.getDescricao(), createdAluguel.getTrancaInicio());
 
-            email.enviarEmail(ciclista.getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!");
+            email.enviarEmail(ciclista.getEmail(), "Aluguel realizado", "O aluguel da bicicleta foi realizado com sucesso!\n\n " +
+                            "Dados do aluguel:\n" +
+                            "- Horario: " + createdAluguel.getHoraInicio() + ".\n" +
+                            "- Tranca: " + createdAluguel.getTrancaInicio() + ".\n" +
+                            "- Valor: " + createdAluguel.getCobranca() + ".");
 
             return ResponseEntity.ok(createdAluguel);
         } catch (CustomException e) {
@@ -99,10 +109,10 @@ public class AluguelService {
     public ResponseEntity<Aluguel> postDevolucao(int idBicicleta, int idTranca) throws CustomException {
         try{
             Aluguel aluguel = new Aluguel();
-            Bicicleta bicicletaDevolvida = bicicleta.getBicicleta(idBicicleta); // TODO /bicicleta/{idBicicleta} Obter bicicleta
+            BicicletaModel bicicletaModelDevolvida = bicicletaModel.getBicicleta(idBicicleta); // TODO /bicicleta/{idBicicleta} Obter bicicleta
 
-            if(bicicletaDevolvida.getStatus().equals(StatusBicicletaEnum.NOVA.getDescricao()) || bicicletaDevolvida.getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
-                bicicleta.cadastrarBicicleta(bicicletaDevolvida);
+            if(bicicletaModelDevolvida.getStatus().equals(StatusBicicletaEnum.NOVA.getDescricao()) || bicicletaModelDevolvida.getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
+                bicicletaModel.cadastrarBicicleta(bicicletaModelDevolvida);
             }
 
             Aluguel[] oldAlugueis = aluguelRepository.findByBicicletaAndTrancaInicio(idBicicleta, idTranca);
@@ -143,15 +153,15 @@ public class AluguelService {
             throw new CustomException(ErrorEnum.TRANCA_INVALIDA);
         }
 
-        if(this.tranca.destrancar(idTranca, idBicicleta) == null){
-            throw new CustomException(ErrorEnum.NAO_DESTRANCOU);
-        }
-
         if(tranca.getBicicletaByIdTranca(idTranca) == null || tranca.getBicicletaByIdTranca(idBicicleta).getId() != idBicicleta){
             throw new CustomException(ErrorEnum.TRANCA_SEM_ESSA_BICICLETA);
         }
 
-        if(this.getAluguelAberto(idCiclista).hasBody() && this.getAluguelAberto(idCiclista).getBody().getHoraFim() == null ){
+        if(this.tranca.destrancar(idTranca, idBicicleta) == null){
+            throw new CustomException(ErrorEnum.NAO_DESTRANCOU);
+        }
+
+        if(this.getAluguelAberto(idCiclista).hasBody()){
             throw new CustomException(ErrorEnum.JA_TEM_ALUGUEL);
         }
 

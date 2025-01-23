@@ -79,7 +79,7 @@ public class CiclistaController {
     }
 
     @GetMapping("/{idCiclista}/bicicletaAlugada")
-    public ResponseEntity<Bicicleta> recuperarBicicleta(@PathVariable int idCiclista) throws CustomException {
+    public ResponseEntity<BicicletaModel> recuperarBicicleta(@PathVariable int idCiclista) throws CustomException {
         try{
             ciclistaService.ciclistaExists(idCiclista);
             ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelAberto(idCiclista);
@@ -88,9 +88,9 @@ public class CiclistaController {
                 return ResponseEntity.ok().build();
             }
 
-            Bicicleta bicicleta = new Bicicleta(aluguel.getBody().getBicicleta(), "Caloi", "Elite Carbon", "2023", 1234, "OCUPADA");
+            BicicletaModel bicicletaModel = new BicicletaModel(aluguel.getBody().getBicicleta(), "Caloi", "Elite Carbon", "2023", 1234, "OCUPADA");
 
-            return ResponseEntity.ok(bicicleta);
+            return ResponseEntity.ok(bicicletaModel);
         } catch (CustomException e) {
             throw new CustomException(e);
         }
