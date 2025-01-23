@@ -88,7 +88,7 @@ class CobrancaTestIntegracao {
 
         String url = "https://bicicletario-gimk.onrender.com/externo/cobranca";
         when(restTemplate.postForEntity(url, cobrancaDTO, CobrancaResponseDTO.class))
-                .thenReturn(new ResponseEntity<>(new CobrancaResponseDTO(), HttpStatus.UNPROCESSABLE_ENTITY));
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.UNPROCESSABLE_ENTITY));
 
         boolean resultado = cobranca.enviarCobranca(idCiclista, valor);
 
