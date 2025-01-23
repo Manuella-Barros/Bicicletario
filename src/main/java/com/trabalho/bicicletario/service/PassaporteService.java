@@ -41,12 +41,25 @@ public class PassaporteService {
     }
 
     public ResponseEntity<Passaporte> updatePassaporte(int id, Passaporte updatePassaporte) throws CustomException {
-        if(!updatePassaporte.checkIfValid() || id <= 0){
+        if(updatePassaporte == null){
+            return null;
+        }
+
+        if(!updatePassaporte.checkIfValid()){
+            throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
+        }
+
+        if(id == 0 && updatePassaporte != null){
+            Passaporte updatedPassaporte = passaporteRepository.save( updatePassaporte );
+            return ResponseEntity.ok(updatedPassaporte);
+        }
+
+        if(id == 0){
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
         }
 
         if(!passaporteRepository.existsById(id)){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         updatePassaporte.setId(id);

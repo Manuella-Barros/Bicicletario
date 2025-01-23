@@ -114,7 +114,7 @@ public class CiclistaService {
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
         if(!optionalCiclista.isPresent()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         updateCiclista.setId(optionalCiclista.get().getId());
@@ -123,6 +123,10 @@ public class CiclistaService {
         updateCiclista.setIdPassaporte(optionalCiclista.get().getIdPassaporte());
 
         Ciclista updatedCiclista = ciclistaRepository.save( updateCiclista );
+
+        if(email.enviarEmail(updatedCiclista.getEmail(), "Atualização realizado!", "Seu cadastro foi atualizado com sucesso!") == null){
+            throw new CustomException(ErrorEnum.ERRO_ENVIO_EMAIL);
+        }
 
         return ResponseEntity.ok(updatedCiclista);
     }
@@ -157,7 +161,7 @@ public class CiclistaService {
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
         if(!optionalCiclista.isPresent()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         optionalCiclista.get().setStatus(StatusCiclistaEnum.ATIVO.getDescricao());

@@ -57,7 +57,9 @@ public class CiclistaController {
             ResponseEntity<Passaporte> passaporte = passaporteService.updatePassaporte(ciclista.getBody().getIdPassaporte(), updateCiclistaDTO.getPassaporte());
 
             CiclistaResponseDTO response = new CiclistaResponseDTO(ciclista.getBody());
-            response.setPassaporte(passaporte.getBody());
+
+            if(passaporte != null)
+                response.setPassaporte(passaporte.getBody());
 
             return ResponseEntity.ok(response);
         } catch (CustomException e) {
