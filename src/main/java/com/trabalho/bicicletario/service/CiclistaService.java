@@ -246,7 +246,7 @@ public class CiclistaService {
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
         if(!optionalCiclista.isPresent()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         return this.cartaoService.getCartaoById(optionalCiclista.get().getIdCartao());
@@ -260,7 +260,11 @@ public class CiclistaService {
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
         if(!optionalCiclista.isPresent()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
+        }
+
+        if(!cobranca.validarCartao(updateCartao)){
+            throw new CustomException(ErrorEnum.CARTAO_INVALIDO);
         }
 
         return this.cartaoService.updateCartao(optionalCiclista.get().getIdCartao(), updateCartao);

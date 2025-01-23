@@ -47,12 +47,10 @@ public class CartaoService {
     public ResponseEntity<Cartao> updateCartao(int id, Cartao updateCartao) throws CustomException {
         if(!updateCartao.checkIfValid() || id <= 0){
             throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
-
         }
 
         if(!this.getCartaoById(id).hasBody()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
-
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         updateCartao.setId(id);
