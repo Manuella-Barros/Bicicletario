@@ -164,7 +164,6 @@ class TrancaTestIntegracao {
         TrancaResponse resposta = tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), 1);
 
         assertNull(resposta);
-        assertEquals(StatusTrancaEnum.TRANCAR.getDescricao(), resposta.getStatus());
     }
 
     @Test
@@ -177,6 +176,5 @@ class TrancaTestIntegracao {
         TrancaResponse resposta = tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), 1);
 
         assertNull(resposta);
-        assertEquals(StatusTrancaEnum.TRANCAR.getDescricao(), resposta.getStatus());
     }
 }
