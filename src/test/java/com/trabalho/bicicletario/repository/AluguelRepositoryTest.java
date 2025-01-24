@@ -1,59 +1,114 @@
 package com.trabalho.bicicletario.repository;
 
 import com.trabalho.bicicletario.model.Aluguel;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
-@DataJpaTest
-public class AluguelRepositoryTest {
+@ExtendWith(MockitoExtension.class)
+class AluguelRepositoryTest {
 
-    @Autowired
+    @Mock
     private AluguelRepository aluguelRepository;
 
-    private Aluguel aluguel;
-
-    @BeforeEach
-    public void setUp() {
-        aluguel = new Aluguel();
+    @Test
+    void deveSalvarEEncontrarAluguelPorCiclista() {
+        Aluguel aluguel = new Aluguel();
         aluguel.setCiclista(1);
-        aluguel.setBicicleta(101);
-        aluguel.setTrancaInicio(1001);
-        aluguelRepository.save(aluguel);
+        aluguel.setBicicleta(2);
+        aluguel.setTrancaInicio(3);
+        aluguel.setTrancaFim(4);
+        aluguel.setHoraInicio(LocalDateTime.now());
+        aluguel.setHoraFim(LocalDateTime.now().plusHours(1));
+
+        when(aluguelRepository.findByCiclista(1)).thenReturn(aluguel);
+
+        Aluguel encontrado = aluguelRepository.findByCiclista(1);
+
+        assertNotNull(encontrado);
+        assertEquals(1, encontrado.getCiclista());
+        verify(aluguelRepository).findByCiclista(1);
     }
 
     @Test
-    public void testFindByCiclista() {
-        Aluguel found = aluguelRepository.findByCiclista(1);
-        assertNotNull(found);
-        assertEquals(1, found.getCiclista());
+    void deveSalvarEEncontrarAluguelPorBicicleta() {
+        Aluguel aluguel = new Aluguel();
+        aluguel.setCiclista(1);
+        aluguel.setBicicleta(2);
+        aluguel.setTrancaInicio(3);
+        aluguel.setTrancaFim(4);
+        aluguel.setHoraInicio(LocalDateTime.now());
+        aluguel.setHoraFim(LocalDateTime.now().plusHours(1));
+
+        when(aluguelRepository.findByBicicleta(2)).thenReturn(aluguel);
+
+        Aluguel encontrado = aluguelRepository.findByBicicleta(2);
+
+        assertNotNull(encontrado);
+        assertEquals(2, encontrado.getBicicleta());
+        verify(aluguelRepository).findByBicicleta(2);
     }
 
     @Test
-    public void testFindByBicicleta() {
-        Aluguel found = aluguelRepository.findByBicicleta(101);
-        assertNotNull(found);
-        assertEquals(101, found.getBicicleta());
+    void deveSalvarEEncontrarAluguelPorBicicletaETrancaInicio() {
+        Aluguel aluguel = new Aluguel();
+        aluguel.setCiclista(1);
+        aluguel.setBicicleta(2);
+        aluguel.setTrancaInicio(3);
+        aluguel.setTrancaFim(4);
+        aluguel.setHoraInicio(LocalDateTime.now());
+        aluguel.setHoraFim(LocalDateTime.now().plusHours(1));
+
+        when(aluguelRepository.findByBicicletaAndTrancaInicio(2, 3))
+                .thenReturn(new Aluguel[]{aluguel});
+
+        Aluguel[] encontrados = aluguelRepository.findByBicicletaAndTrancaInicio(2, 3);
+
+        assertNotNull(encontrados);
+        assertEquals(1, encontrados.length);
+        assertEquals(2, encontrados[0].getBicicleta());
+        assertEquals(3, encontrados[0].getTrancaInicio());
+        verify(aluguelRepository).findByBicicletaAndTrancaInicio(2, 3);
     }
 
     @Test
-    public void testFindByBicicletaAndTrancaInicio() {
-        Aluguel[] found = aluguelRepository.findByBicicletaAndTrancaInicio(101, 1001);
-        assertNotNull(found);
-        assertEquals(1, found.length);
-        assertEquals(101, found[0].getBicicleta());
-        assertEquals(1001, found[0].getTrancaInicio());
-    }
+    void deveSalvarEEncontrarTodosOsAlugueisPorCiclista() {
+        Aluguel aluguel1 = new Aluguel();
+        aluguel1.setCiclista(1);
+        aluguel1.setBicicleta(2);
+        aluguel1.setTrancaInicio(3);
+        aluguel1.setTrancaFim(4);
+        aluguel1.setHoraInicio(LocalDateTime.now());
+        aluguel1.setHoraFim(LocalDateTime.now().plusHours(1));
 
-    @Test
-    public void testFindAllByCiclista() {
-        Aluguel[] found = aluguelRepository.findAllByCiclista(1);
-        assertNotNull(found);
-        assertTrue(found.length > 0);
-        assertEquals(1, found[0].getCiclista());
+        Aluguel aluguel2 = new Aluguel();
+        aluguel2.setCiclista(1);
+        aluguel2.setBicicleta(5);
+        aluguel2.setTrancaInicio(6);
+        aluguel2.setTrancaFim(7);
+        aluguel2.setHoraInicio(LocalDateTime.now());
+        aluguel2.setHoraFim(LocalDateTime.now().plusHours(2));
+
+        Aluguel[] aluguels = {aluguel1, aluguel2};
+
+        when(aluguelRepository.findAllByCiclista(1))
+                .thenReturn(aluguels);
+
+        Aluguel[] encontrados = aluguelRepository.findAllByCiclista(1);
+
+        assertNotNull(encontrados);
+        assertEquals(2, encontrados.length);
+        assertEquals(2, encontrados[0].getBicicleta());
+        assertEquals(1, encontrados[1].getCiclista());
+        verify(aluguelRepository).findAllByCiclista(1);
     }
 }
