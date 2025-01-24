@@ -71,18 +71,4 @@ public class FuncionarioController {
             throw new CustomException(e);
         }
     }
-
-    @GetMapping("/getAll") // TODO - APAGAR
-    public ResponseEntity<Iterable<Funcionario>> pegaTodos() {
-        Iterable<Funcionario> alugueis = funcionarioService.pegaTodos();
-
-        return ResponseEntity.ok(alugueis);
-    }
-
-    @DeleteMapping("/deleteAll") // TODO - APAGAR
-    public ResponseEntity deletaTodos() {
-        funcionarioService.deletaTodos();
-
-        return ResponseEntity.ok().build();
-    }
 }

@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CobrancaDTO{
-    private int idCiclista;
+    private int ciclista;
     private double valor;
 }

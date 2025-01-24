@@ -8,6 +8,7 @@ import com.trabalho.bicicletario.exception.CustomException;
 import com.trabalho.bicicletario.model.*;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Enum.StatusCiclistaEnum;
+import com.trabalho.bicicletario.model.integracoes.Bicicleta;
 import com.trabalho.bicicletario.model.integracoes.Cobranca;
 import com.trabalho.bicicletario.model.integracoes.Email;
 import com.trabalho.bicicletario.model.integracoes.dtos.EmailDTO;
@@ -32,17 +33,19 @@ public class CiclistaService {
     AluguelService aluguelService;
     Cobranca cobranca;
     Email email;
+    Bicicleta bicicleta;
 
     @PersistenceContext
     EntityManager entityManager;
 
-    public CiclistaService(CiclistaRepository ciclistaRepository, Email email, Cobranca cobranca, PassaporteService passaporteService, CartaoService cartaoService, AluguelService aluguelService) {
+    public CiclistaService(CiclistaRepository ciclistaRepository, Email email, Cobranca cobranca, PassaporteService passaporteService, CartaoService cartaoService, AluguelService aluguelService, Bicicleta bicicleta) {
         this.ciclistaRepository = ciclistaRepository;
         this.cobranca = cobranca;
         this.email = email;
         this.passaporteService = passaporteService;
         this.cartaoService = cartaoService;
         this.aluguelService = aluguelService;
+        this.bicicleta = bicicleta;
     }
 
     public ResponseEntity<CiclistaResponseDTO> createCiclista(Ciclista ciclista, Cartao cartao, Passaporte passaporte) throws CustomException {
@@ -150,7 +153,7 @@ public class CiclistaService {
         Optional<Ciclista> optionalCiclista = ciclistaRepository.findById( id );
 
         if(!optionalCiclista.isPresent()){
-            throw new CustomException(ErrorEnum.REQUISICAO_MAL_FORMADA);
+            throw new CustomException(ErrorEnum.NAO_ENCONTRADO);
         }
 
         return ResponseEntity.ok().build();
@@ -275,5 +278,16 @@ public class CiclistaService {
 
     public void deleteCiclistaById(int id) throws CustomException {
         ciclistaRepository.deleteById( id );
+    }
+
+    public BicicletaModel recuperarBicicleta(int idCiclista) throws CustomException {
+        this.ciclistaExists(idCiclista);
+        ResponseEntity<Aluguel> aluguel = aluguelService.getAluguelAberto(idCiclista);
+
+        if(!aluguel.hasBody()){
+            return null;
+        }
+
+        return bicicleta.getBicicleta(aluguel.getBody().getBicicleta());
     }
 }

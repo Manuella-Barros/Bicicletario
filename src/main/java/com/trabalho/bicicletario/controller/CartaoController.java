@@ -41,18 +41,4 @@ public class CartaoController {
             throw new CustomException(e);
         }
     }
-
-    @GetMapping("/getAll") // TODO - APAGAR
-    public ResponseEntity<Iterable<Cartao>> pegaTodos() {
-        Iterable<Cartao> alugueis = cartaoService.pegaTodos();
-
-        return ResponseEntity.ok(alugueis);
-    }
-
-    @DeleteMapping("/deleteAll") // TODO - APAGAR
-    public ResponseEntity deletaTodos() {
-        cartaoService.deletaTodos();
-
-        return ResponseEntity.ok().build();
-    }
 }

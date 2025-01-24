@@ -42,7 +42,7 @@ public class AluguelService {
                 throw new CustomException(ErrorEnum.DADOS_INVALIDOS);
             }
 
-            isAbleToAlugar(aluguel.getTrancaInicio(), aluguel.getCiclista(), aluguel.getBicicleta());
+            isAbleToAlugar(aluguel.getTrancaInicio(), aluguel.getCiclista());
 
             if(aluguel.getCobranca() == 0)
                 aluguel.setCobranca(10.00);
@@ -113,7 +113,7 @@ public class AluguelService {
     public ResponseEntity<Aluguel> postDevolucao(int idBicicleta, int idTranca) throws CustomException {
         try{
             Aluguel aluguel = new Aluguel();
-            BicicletaModel bicicletaModelDevolvida = bicicletaModel.getBicicleta(idBicicleta); // TODO /bicicleta/{idBicicleta} Obter bicicleta
+            BicicletaModel bicicletaModelDevolvida = bicicleta.getBicicleta(idBicicleta);
 
             if(bicicletaModelDevolvida.getStatus().equals(StatusBicicletaEnum.NOVA.getDescricao()) || bicicletaModelDevolvida.getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
                 bicicletaModel.cadastrarBicicleta(bicicletaModelDevolvida);
@@ -136,6 +136,16 @@ public class AluguelService {
             Double cobranca = calculaValorCobranca(aluguel.getHoraInicio(), dataDevolucao);
 
             aluguel.setCobranca(cobranca);
+
+            if(aluguel.getCobranca() != 0){
+                boolean isPagamentoAutorizado = this.cobranca.enviarCobranca(aluguel.getCiclista(), aluguel.getCobranca());
+
+                if(!isPagamentoAutorizado){
+                    this.cobranca.adicionaFilaDeCobranca(aluguel.getCiclista(), aluguel.getCobranca());
+                    throw new CustomException(ErrorEnum.PAGAMENTO_NAO_AUTORIZADO);
+                }
+            }
+
             aluguel.setHoraFim(dataDevolucao);
             aluguel.setTrancaFim(idTranca);
             bicicleta.alterarStatusBicicleta(StatusBicicletaEnum.DISPONIVEL.getDescricao(), aluguel.getBicicleta());
@@ -151,26 +161,22 @@ public class AluguelService {
         }
     }
 
-
-    public void isAbleToAlugar(int idTranca, int idCiclista, int idBicicleta) throws CustomException {
+    public void isAbleToAlugar(int idTranca, int idCiclista) throws CustomException {
         if(this.tranca.getTranca(idTranca) == null){
             throw new CustomException(ErrorEnum.TRANCA_INVALIDA);
         }
 
-        if(tranca.getBicicletaByIdTranca(idTranca) == null || tranca.getBicicletaByIdTranca(idBicicleta).getId() != idBicicleta){
-            throw new CustomException(ErrorEnum.TRANCA_SEM_ESSA_BICICLETA);
-        }
+        BicicletaResponse bicicletaResponse = tranca.getBicicletaByIdTranca(idTranca);
 
-        BicicletaDTO bicicletaDTO = new BicicletaDTO(idBicicleta);
-        if(this.tranca.destrancar(idTranca, bicicletaDTO) == null){
-            throw new CustomException(ErrorEnum.NAO_DESTRANCOU);
+        if(bicicletaResponse == null){
+            throw new CustomException(ErrorEnum.TRANCA_SEM_ESSA_BICICLETA);
         }
 
         if(this.getAluguelAberto(idCiclista).hasBody()){
             throw new CustomException(ErrorEnum.JA_TEM_ALUGUEL);
         }
 
-        if(this.tranca.getBicicletaByIdTranca(idTranca).getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
+        if(bicicletaResponse.getStatus().equals(StatusBicicletaEnum.EM_REPARO.getDescricao())){
             throw new CustomException(ErrorEnum.BICICLETA_EM_REPARO);
         }
     }
@@ -200,8 +206,6 @@ public class AluguelService {
 
     public Aluguel[] recuperarDados() throws JsonProcessingException, CustomException {
         this.deleteAllAlugueis();
-
-        // TODO - DE ONDE VEM E PRA ONDE VAI ESSE STATUS
 
         var jsons = " [\n" +
                 "    {\n" +
