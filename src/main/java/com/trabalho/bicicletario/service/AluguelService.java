@@ -10,6 +10,7 @@ import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
 import com.trabalho.bicicletario.model.Enum.StatusTrancaEnum;
 import com.trabalho.bicicletario.model.integracoes.*;
+import com.trabalho.bicicletario.model.integracoes.dtos.BicicletaDTO;
 import com.trabalho.bicicletario.model.integracoes.dtos.EmailDTO;
 import com.trabalho.bicicletario.model.integracoes.dtos.responses.BicicletaResponse;
 import com.trabalho.bicicletario.repository.AluguelRepository;
@@ -160,7 +161,8 @@ public class AluguelService {
             throw new CustomException(ErrorEnum.TRANCA_SEM_ESSA_BICICLETA);
         }
 
-        if(this.tranca.destrancar(idTranca, idBicicleta) == null){
+        BicicletaDTO bicicletaDTO = new BicicletaDTO(idBicicleta);
+        if(this.tranca.destrancar(idTranca, bicicletaDTO) == null){
             throw new CustomException(ErrorEnum.NAO_DESTRANCOU);
         }
 

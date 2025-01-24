@@ -3,6 +3,7 @@ package com.trabalho.bicicletario.model.integracoes;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
+import com.trabalho.bicicletario.model.Enum.StatusTrancaEnum;
 import com.trabalho.bicicletario.model.integracoes.dtos.BicicletaDTO;
 import com.trabalho.bicicletario.model.integracoes.dtos.responses.BicicletaResponse;
 import com.trabalho.bicicletario.model.integracoes.dtos.responses.TrancaResponse;
@@ -41,7 +42,7 @@ class TrancaTestIntegracao {
 
     @Test
     void getTranca_sucesso_retornaTrancaResponse() {
-        TrancaResponse mockResponse = new TrancaResponse(1,1,1,"","","", StatusBicicletaEnum.DISPONIVEL.getDescricao());
+        TrancaResponse mockResponse = new TrancaResponse(1,1,1,"","","", StatusTrancaEnum.TRANCAR.getDescricao());
 
         when(restTemplate.getForEntity(anyString(), Mockito.eq(TrancaResponse.class)))
                 .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
@@ -50,7 +51,7 @@ class TrancaTestIntegracao {
 
         assertNotNull(resposta);
         assertEquals(1, resposta.getId());
-        assertEquals(StatusBicicletaEnum.DISPONIVEL.getDescricao(), resposta.getStatus());
+        assertEquals(StatusTrancaEnum.TRANCAR.getDescricao(), resposta.getStatus());
     }
 
     @Test
@@ -63,62 +64,119 @@ class TrancaTestIntegracao {
         assertNull(resposta);
     }
 
-//    @Test
-//    void destrancar_sucesso_retornaTrancaResponse() {
-//        TrancaResponse mockResponse = new TrancaResponse(1, "Tranca Mock", "DESBLOQUEADA");
-//
-//        when(restTemplate.postForEntity(anyString(), any(BicicletaDTO.class), Mockito.eq(TrancaResponse.class)))
-//                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
-//
-//        TrancaResponse resposta = tranca.destrancar(1, 101);
-//
-//        assertNotNull(resposta, "A resposta não deveria ser nula.");
-//        assertEquals("DESBLOQUEADA", resposta.getStatus(), "A tranca deveria estar DESBLOQUEADA.");
-//    }
+    @Test
+    void destrancar_sucesso_retornaTrancaResponse() {
+        String url = "https://bicicletario.onrender.com/tranca/1/destrancar";
+        TrancaResponse mockResponse = new TrancaResponse(1,1,1,"","","", StatusTrancaEnum.DESTRANCAR.getDescricao());
+        BicicletaDTO bicicletaDTO = new BicicletaDTO(1);
+        when(restTemplate.postForEntity(url, bicicletaDTO, TrancaResponse.class))
+                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
 
-//    @Test
-//    void destrancar_falha_retornaNull() {
-//        when(restTemplate.postForEntity(anyString(), any(BicicletaDTO.class), Mockito.eq(TrancaResponse.class)))
-//                .thenReturn(new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
-//
-//        TrancaResponse resposta = trancaService.destrancar(1, 101);
-//
-//        assertNull(resposta, "A resposta deveria ser nula em caso de falha.");
-//    }
-//
-//    @Test
-//    void getBicicletaByIdTranca_sucesso_retornaBicicletaResponse() {
-//        BicicletaResponse mockResponse = new BicicletaResponse(101, "Bicicleta Mock");
-//
-//        when(restTemplate.getForEntity(anyString(), Mockito.eq(BicicletaResponse.class)))
-//                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
-//
-//        BicicletaResponse resposta = trancaService.getBicicletaByIdTranca(1);
-//
-//        assertNotNull(resposta, "A resposta não deveria ser nula.");
-//        assertEquals(101, resposta.getId(), "O ID da bicicleta deveria ser 101.");
-//    }
-//
-//    @Test
-//    void alterarStatusTranca_sucesso_retornaTrancaResponse() {
-//        TrancaResponse mockResponse = new TrancaResponse(1, "Tranca Mock", "BLOQUEADA");
-//
-//        when(restTemplate.postForEntity(anyString(), anyString(), Mockito.eq(TrancaResponse.class)))
-//                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
-//
-//        TrancaResponse resposta = trancaService.alterarStatusTranca("BLOQUEADA", 1);
-//
-//        assertNotNull(resposta, "A resposta não deveria ser nula.");
-//        assertEquals("BLOQUEADA", resposta.getStatus(), "O status da tranca deveria ser BLOQUEADA.");
-//    }
-//
-//    @Test
-//    void alterarStatusTranca_falha_retornaNull() {
-//        when(restTemplate.postForEntity(anyString(), anyString(), Mockito.eq(TrancaResponse.class)))
-//                .thenReturn(new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
-//
-//        TrancaResponse resposta = trancaService.alterarStatusTranca("BLOQUEADA", 1);
-//
-//        assertNull(resposta, "A resposta deveria ser nula em caso de falha.");
-//    }
+        TrancaResponse resposta = tranca.destrancar(1,bicicletaDTO);
+
+        assertNotNull(resposta);
+        assertEquals(StatusTrancaEnum.DESTRANCAR.getDescricao(), resposta.getStatus());
+    }
+
+    @Test
+    void destrancar_falha_retornaNOTFOUND() {
+        String url = "https://bicicletario.onrender.com/tranca/1/destrancar";
+        BicicletaDTO bicicletaDTO = new BicicletaDTO(0);
+
+        when(restTemplate.postForEntity(url, bicicletaDTO, TrancaResponse.class))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
+        TrancaResponse resposta = tranca.destrancar(1, bicicletaDTO);
+
+        assertNull(resposta);
+    }
+
+    @Test
+    void destrancar_falha_retornaDadosInvalidos() {
+        String url = "https://bicicletario.onrender.com/tranca/1/destrancar";
+        BicicletaDTO bicicletaDTO = new BicicletaDTO(0);
+
+        when(restTemplate.postForEntity(url, bicicletaDTO, TrancaResponse.class))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.UNPROCESSABLE_ENTITY));
+
+        TrancaResponse resposta = tranca.destrancar(0, bicicletaDTO);
+
+        assertNull(resposta);
+    }
+
+    @Test
+    void getBicicletaByIdTranca_sucesso_retornaBicicletaResponse() {
+        BicicletaResponse mockResponse = new BicicletaResponse(1,"","","",1, StatusBicicletaEnum.DISPONIVEL.getDescricao());
+
+        String url = "https://bicicletario.onrender.com/tranca/1/bicicleta";
+        when(restTemplate.getForEntity(url, BicicletaResponse.class))
+                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
+
+        BicicletaResponse resposta = tranca.getBicicletaByIdTranca(1);
+
+        assertNotNull(resposta);
+        assertEquals(1, resposta.getId());
+    }
+    @Test
+    void getBicicletaByIdTranca_falha_NOTFOUND() {
+
+        String url = "https://bicicletario.onrender.com/tranca/1/bicicleta";
+        when(restTemplate.getForEntity(url, BicicletaResponse.class))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
+        BicicletaResponse resposta = tranca.getBicicletaByIdTranca(1);
+
+        assertNull(resposta);
+    }
+
+    @Test
+    void getBicicletaByIdTranca_falha_DADOSInvalidos() {
+        String url = "https://bicicletario.onrender.com/tranca/1/bicicleta";
+        when(restTemplate.getForEntity(url, BicicletaResponse.class))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.UNPROCESSABLE_ENTITY));
+
+        BicicletaResponse resposta = tranca.getBicicletaByIdTranca(1);
+
+        assertNull(resposta);
+    }
+
+    @Test
+    void alterarStatusTranca_sucesso_retornaTrancaResponse() {
+        TrancaResponse mockResponse = new TrancaResponse(1,1,1,"","","", StatusTrancaEnum.TRANCAR.getDescricao());
+        String url = "https://bicicletario.onrender.com/tranca/1/status/Trancar";
+
+        when(restTemplate.postForEntity(url, "", TrancaResponse.class))
+                .thenReturn(new ResponseEntity<>(mockResponse, HttpStatus.OK));
+
+        TrancaResponse resposta = tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), 1);
+
+        assertNotNull(resposta);
+        assertEquals(StatusTrancaEnum.TRANCAR.getDescricao(), resposta.getStatus());
+    }
+
+    @Test
+    void alterarStatusTranca_falha_retornaNOTFOUND() {
+        String url = "https://bicicletario.onrender.com/tranca/1/status/Trancar";
+
+        when(restTemplate.postForEntity(url, "", TrancaResponse.class))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+
+        TrancaResponse resposta = tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), 1);
+
+        assertNull(resposta);
+        assertEquals(StatusTrancaEnum.TRANCAR.getDescricao(), resposta.getStatus());
+    }
+
+    @Test
+    void alterarStatusTranca_falha_retornaDADOSInvalidos() {
+        String url = "https://bicicletario.onrender.com/tranca/1/status/Trancar";
+
+        when(restTemplate.postForEntity(url, "", TrancaResponse.class))
+                .thenReturn(new ResponseEntity<>(null, HttpStatus.UNPROCESSABLE_ENTITY));
+
+        TrancaResponse resposta = tranca.alterarStatusTranca(StatusTrancaEnum.TRANCAR.getDescricao(), 1);
+
+        assertNull(resposta);
+        assertEquals(StatusTrancaEnum.TRANCAR.getDescricao(), resposta.getStatus());
+    }
 }

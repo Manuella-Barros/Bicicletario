@@ -36,13 +36,12 @@ public class Tranca {
         return trancaResponse;
     }
 
-    public TrancaResponse destrancar(int idTranca, int idBicicleta) {
+    public TrancaResponse destrancar(int idTranca, BicicletaDTO bicicletaDTO) {
         //destranca a bicicleta da tranca no equipamento
 
         //cria url
         String urlReq = url + "tranca/" + idTranca+ "/destrancar";
-        //monta variavel pro post
-        BicicletaDTO bicicletaDTO = new BicicletaDTO(idBicicleta);
+
         //variavel de resposta
         TrancaResponse trancaResponse = null;
         try {
