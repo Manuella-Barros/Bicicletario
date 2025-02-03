@@ -10,7 +10,6 @@ import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Enum.StatusBicicletaEnum;
 import com.trabalho.bicicletario.model.Enum.StatusTrancaEnum;
 import com.trabalho.bicicletario.model.integracoes.*;
-import com.trabalho.bicicletario.model.integracoes.dtos.BicicletaDTO;
 import com.trabalho.bicicletario.model.integracoes.dtos.EmailDTO;
 import com.trabalho.bicicletario.model.integracoes.dtos.responses.BicicletaResponse;
 import com.trabalho.bicicletario.repository.AluguelRepository;
@@ -231,7 +230,7 @@ public class AluguelService {
                 "        \"trancaFim\": 2,\n" +
 //      "        \"status\": \"FINALIZADO_COM_COBRANCA_EXTRA_PENDENTE\",\n" +
                 "        \"cobranca\": 3,\n" +
-                "        \"horaInicio\": \"" + LocalDateTime.now().minusHours(2) + "\",\n" + // Adicionada a vírgula aqui
+                "        \"horaInicio\": \"" + LocalDateTime.now().minusHours(2) + "\",\n" +
                 "        \"horaFim\": \"" + LocalDateTime.now() + "\"\n" +
                 "    }\n" +
                 "]";
@@ -249,5 +248,16 @@ public class AluguelService {
 
     public void deletaTodos(){
         aluguelRepository.deleteAll();
+    }
+
+    public ResponseEntity<Aluguel> createMockAluguel(Aluguel aluguel) {
+        LocalDateTime dataAtual = LocalDateTime.now();
+
+        if(aluguel.getHoraFim() == null)
+            aluguel.setHoraFim(dataAtual);
+
+        Aluguel createdAluguel = aluguelRepository.save(aluguel);
+
+        return ResponseEntity.ok(createdAluguel);
     }
 }

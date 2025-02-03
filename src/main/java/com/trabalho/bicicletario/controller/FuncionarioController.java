@@ -1,7 +1,6 @@
 package com.trabalho.bicicletario.controller;
 
 import com.trabalho.bicicletario.exception.CustomException;
-import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.Funcionario;
 import com.trabalho.bicicletario.service.FuncionarioService;
 import org.springframework.http.HttpStatus;
