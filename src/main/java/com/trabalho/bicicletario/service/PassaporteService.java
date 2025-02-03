@@ -1,7 +1,6 @@
 package com.trabalho.bicicletario.service;
 
 import com.trabalho.bicicletario.exception.CustomException;
-import com.trabalho.bicicletario.model.Ciclista;
 import com.trabalho.bicicletario.model.Enum.ErrorEnum;
 import com.trabalho.bicicletario.model.Passaporte;
 import com.trabalho.bicicletario.repository.PassaporteRepository;
@@ -71,9 +70,5 @@ public class PassaporteService {
 
     public void deleteAllPassaportes() {
         this.passaporteRepository.deleteAll();
-    }
-
-    public Iterable<Passaporte> pegaTodos(){
-        return passaporteRepository.findAll();
     }
 }

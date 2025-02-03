@@ -30,24 +30,4 @@ public class RecuperarDadosService {
             aluguelService.createMockAluguel(aluguel);
         }
     }
-
-    public Iterable<Ciclista> getCiclistas(){
-        return ciclistaService.pegaTodos();
-    }
-
-    public Iterable<Cartao> getCartoes(){
-        return cartaoService.pegaTodos();
-    }
-
-    public Iterable<Funcionario> getFuncionarios(){
-        return funcionarioService.pegaTodos();
-    }
-
-    public Iterable<Aluguel> getAlugueis(){
-        return aluguelService.pegaTodos();
-    }
-
-    public Iterable<Passaporte> getPassaportes(){
-        return passaporteService.pegaTodos();
-    }
 }
